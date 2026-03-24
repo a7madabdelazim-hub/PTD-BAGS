@@ -181,6 +181,31 @@ main {
 }
 .sh-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border2), transparent); }
 
+/* DIFF ARROW CELL */
+.td-up {
+  font-family: var(--fm); font-size: 0.78rem; font-weight: 700;
+  color: var(--green); background: rgba(46,202,127,0.06);
+  border-bottom: 1px solid rgba(46,202,127,0.08) !important;
+  border-right: 1px solid rgba(46,202,127,0.1) !important;
+  white-space: nowrap; min-width: 90px;
+}
+.td-dn {
+  font-family: var(--fm); font-size: 0.78rem; font-weight: 700;
+  color: var(--red); background: rgba(224,82,82,0.06);
+  border-bottom: 1px solid rgba(224,82,82,0.08) !important;
+  border-right: 1px solid rgba(224,82,82,0.1) !important;
+  white-space: nowrap; min-width: 90px;
+}
+.td-eq {
+  font-family: var(--fm); font-size: 0.78rem; font-weight: 600;
+  color: var(--text-dim); background: transparent;
+  white-space: nowrap; min-width: 90px;
+}
+.th-ref .thl { color: #a78bfa; }
+.th-ref::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:#a78bfa; opacity:0.6; }
+.th-diff .thl { color: var(--text-dim); }
+.th-diff::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--text-dim); opacity:0.3; }
+
 /* TABLE */
 .tw {
   overflow-x: auto; -webkit-overflow-scrolling: touch;
@@ -361,7 +386,9 @@ footer {
   <div class="tw"><table>
     <thead><tr>
       <th class="th-tp"><span class="thl">Type</span></th>
+      <th class="th-ref"><span class="thl">Min Ref / KG</span><span class="ths">your minimum price</span></th>
       <th class="th-pr"><span class="thl">Price / KG</span><span class="ths">enter manually</span></th>
+      <th class="th-diff"><span class="thl">vs Min Ref</span><span class="ths">difference</span></th>
     </tr></thead>
     <tbody id="t2"></tbody>
   </table></div>
@@ -394,7 +421,7 @@ const DEF = [
   {type:'TH',           L:35,   W:31, G:18, GSM:90},
 ];
 
-let R = DEF.map(b=>({type:b.type,L:'',W:'',G:'',GSM:'',ppkg:'',pack:''}));
+let R = DEF.map(b=>({type:b.type,L:'',W:'',G:'',GSM:'',minref:'',ppkg:'',pack:''}));
 
 const nv=v=>{const x=parseFloat(v);return isNaN(x)?0:x;};
 const ok=v=>v!==''&&v!==null&&v!==undefined;
@@ -419,36 +446,119 @@ const fmt=(v,d)=>{if(!v||v===0)return null;return parseFloat(v.toFixed(d)).toLoc
 const CC=(v,d)=>{const x=fmt(v,d);return x?`<td class="td-cl">${x}</td>`:`<td class="td-cl e">—</td>`;};
 const PC=(v,d)=>{const x=fmt(v,d);return x?`<td class="td-pr">${x}</td>`:`<td class="td-pr e">—</td>`;};
 
-function set(i,k,v){R[i][k]=v;render();}
+// Update only calculated cells — never touch inputs while user is typing
+function updateCalcs(){
+  R.forEach((r,i)=>{
+    const c=calcAll(r);
+    // Table 1 calc cells: rmw, tl, wpc
+    const t1row=document.querySelector(`#t1 tr:nth-child(${i+1})`);
+    if(t1row){
+      const tds=t1row.querySelectorAll('td');
+      setCalcTd(tds[6],c.rmw,1);
+      setCalcTd(tds[7],c.tl,1);
+      setCalcTd(tds[8],c.wpc,4);
+    }
+    // Table 2 diff cell (td index 3)
+    const t2row=document.querySelector(`#t2 tr:nth-child(${i+1})`);
+    if(t2row){
+      const tds=t2row.querySelectorAll('td');
+      setDiffTd(tds[3], nv(r.minref), nv(r.ppkg));
+    }
+    // Table 3 calc cells: ppc, wctn, pctn
+    const t3row=document.querySelector(`#t3 tr:nth-child(${i+1})`);
+    if(t3row){
+      const tds=t3row.querySelectorAll('td');
+      setCalcTd(tds[1],c.ppc,6);
+      setCalcTd(tds[3],c.wctn,4);
+      setPriceTd(tds[4],c.pctn,3);
+    }
+  });
+}
 
+function setDiffTd(td, minref, ppkg){
+  if(!td) return;
+  if(!minref || !ppkg){ td.className='td-eq'; td.textContent='—'; return; }
+  const diff = ppkg - minref;
+  const sign = diff > 0 ? '+' : '';
+  const val  = sign + parseFloat(diff.toFixed(3));
+  if(diff > 0){
+    td.className='td-up';
+    td.innerHTML=`<span style="margin-right:3px">↑</span>${val}`;
+  } else if(diff < 0){
+    td.className='td-dn';
+    td.innerHTML=`<span style="margin-right:3px">↓</span>${val}`;
+  } else {
+    td.className='td-eq';
+    td.textContent='= 0';
+  }
+}
+
+function setCalcTd(td,v,d){
+  if(!td)return;
+  const x=fmt(v,d);
+  td.className=x?'td-cl':'td-cl e';
+  td.textContent=x||'—';
+}
+function setPriceTd(td,v,d){
+  if(!td)return;
+  const x=fmt(v,d);
+  td.className=x?'td-pr':'td-pr e';
+  td.textContent=x||'—';
+}
+
+function set(i,k,v){
+  R[i][k]=v;
+  updateCalcs();
+}
+
+// Full render — only called on init, clear, reset (not while typing)
 function render(){
   document.getElementById('t1').innerHTML=R.map((r,i)=>{
     const c=calcAll(r);
     return`<tr>
       <td class="td-tp">${r.type}</td>
-      <td><input type="number" value="${iv(r.L)}"   step="0.5" placeholder="—" oninput="set(${i},'L',this.value)"></td>
-      <td><input type="number" value="${iv(r.W)}"   step="0.5" placeholder="—" oninput="set(${i},'W',this.value)"></td>
-      <td><input type="number" value="${iv(r.G)}"   step="0.5" placeholder="—" oninput="set(${i},'G',this.value)"></td>
+      <td><input type="number" inputmode="decimal" value="${iv(r.L)}"   step="0.5" placeholder="—" oninput="set(${i},'L',this.value)"></td>
+      <td><input type="number" inputmode="decimal" value="${iv(r.W)}"   step="0.5" placeholder="—" oninput="set(${i},'W',this.value)"></td>
+      <td><input type="number" inputmode="decimal" value="${iv(r.G)}"   step="0.5" placeholder="—" oninput="set(${i},'G',this.value)"></td>
       <td class="td-fx">4</td>
-      <td><input type="number" value="${iv(r.GSM)}" step="1"   placeholder="—" oninput="set(${i},'GSM',this.value)"></td>
-      ${CC(c.rmw,1)}${CC(c.tl,1)}${CC(c.wpc,4)}
+      <td><input type="number" inputmode="decimal" value="${iv(r.GSM)}" step="1"   placeholder="—" oninput="set(${i},'GSM',this.value)"></td>
+      <td class="${c.rmw?'td-cl':'td-cl e'}">${fmt(c.rmw,1)||'—'}</td>
+      <td class="${c.tl ?'td-cl':'td-cl e'}">${fmt(c.tl,1) ||'—'}</td>
+      <td class="${c.wpc?'td-cl':'td-cl e'}">${fmt(c.wpc,4)||'—'}</td>
     </tr>`;
   }).join('');
 
-  document.getElementById('t2').innerHTML=R.map((r,i)=>`<tr>
-    <td class="td-tp">${r.type}</td>
-    <td style="background:rgba(232,160,32,0.05);border-bottom:1px solid rgba(232,160,32,0.08);">
-      <input type="number" class="inp-pr" value="${iv(r.ppkg)}" step="0.01" placeholder="0.00" oninput="set(${i},'ppkg',this.value)">
-    </td>
-  </tr>`).join('');
+  document.getElementById('t2').innerHTML=R.map((r,i)=>{
+    const minref=nv(r.minref), ppkg=nv(r.ppkg);
+    const diff = (minref&&ppkg) ? ppkg-minref : null;
+    const sign = diff!==null&&diff>0?'+':'';
+    const diffVal = diff!==null ? sign+parseFloat(diff.toFixed(3)) : null;
+    let diffClass='td-eq', diffHtml='—';
+    if(diff!==null){
+      if(diff>0){diffClass='td-up';diffHtml=`<span style="margin-right:3px">↑</span>${diffVal}`;}
+      else if(diff<0){diffClass='td-dn';diffHtml=`<span style="margin-right:3px">↓</span>${diffVal}`;}
+      else{diffClass='td-eq';diffHtml='= 0';}
+    }
+    return`<tr>
+      <td class="td-tp">${r.type}</td>
+      <td style="background:rgba(167,139,250,0.05);border-bottom:1px solid rgba(167,139,250,0.08);border-right:1px solid rgba(167,139,250,0.1);">
+        <input type="number" inputmode="decimal" style="border-color:rgba(167,139,250,0.3);color:#a78bfa;width:92px;" value="${iv(r.minref)}" step="0.01" placeholder="0.00" oninput="set(${i},'minref',this.value)">
+      </td>
+      <td style="background:rgba(232,160,32,0.05);border-bottom:1px solid rgba(232,160,32,0.08);">
+        <input type="number" inputmode="decimal" class="inp-pr" value="${iv(r.ppkg)}" step="0.01" placeholder="0.00" oninput="set(${i},'ppkg',this.value)">
+      </td>
+      <td class="${diffClass}" style="text-align:center;">${diffHtml}</td>
+    </tr>`;
+  }).join('');
 
   document.getElementById('t3').innerHTML=R.map((r,i)=>{
     const c=calcAll(r);
     return`<tr>
       <td class="td-tp">${r.type}</td>
-      ${CC(c.ppc,6)}
-      <td><input type="number" value="${iv(r.pack)}" step="1" placeholder="—" oninput="set(${i},'pack',this.value)"></td>
-      ${CC(c.wctn,4)}${PC(c.pctn,3)}
+      <td class="${c.ppc ?'td-cl':'td-cl e'}">${fmt(c.ppc,6) ||'—'}</td>
+      <td><input type="number" inputmode="decimal" value="${iv(r.pack)}" step="1" placeholder="—" oninput="set(${i},'pack',this.value)"></td>
+      <td class="${c.wctn?'td-cl':'td-cl e'}">${fmt(c.wctn,4)||'—'}</td>
+      <td class="${c.pctn?'td-pr':'td-pr e'}">${fmt(c.pctn,3)||'—'}</td>
     </tr>`;
   }).join('');
 }
@@ -462,13 +572,13 @@ function showModal(t){
     it.textContent='Clear All Entries';
     ib.innerHTML='All manually entered values will be<br>cleared. This cannot be undone.';
     bc.className='btn btn-red btn-sm';bc.textContent='Clear All';
-    pending=()=>{R=R.map(r=>({type:r.type,L:'',W:'',G:'',GSM:'',ppkg:'',pack:''}));render();};
+    pending=()=>{R=R.map(r=>({type:r.type,L:'',W:'',G:'',GSM:'',minref:'',ppkg:'',pack:''}));render();};
   }else{
     ic.className='m-icon blu';ic.textContent='↺';
     it.textContent='Reset to Defaults';
     ib.innerHTML='Restore original specification values?<br>Price/KG and Packing will stay empty.';
     bc.className='btn btn-dim btn-sm';bc.textContent='Reset';
-    pending=()=>{R=DEF.map(b=>({type:b.type,L:b.L,W:b.W,G:b.G,GSM:b.GSM,ppkg:'',pack:''}));render();};
+    pending=()=>{R=DEF.map(b=>({type:b.type,L:b.L,W:b.W,G:b.G,GSM:b.GSM,minref:'',ppkg:'',pack:''}));render();};
   }
   bc.onclick=()=>{pending&&pending();closeModal();};
   document.getElementById('modal').classList.add('on');
