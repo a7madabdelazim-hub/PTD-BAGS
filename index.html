@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PTD Bags Pricing Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2128;
+    --border: #30363d;
+    --accent: #f0a500;
+    --text: #e6edf3;
+    --text-muted: #7d8590;
+    --input-bg: #0d1117;
+    --calc-bg: #1a3a2a;
+    --calc-text: #3fb950;
+    --fixed-bg: #1c2a3a;
+    --fixed-text: #58a6ff;
+    --price-bg: rgba(240,165,0,0.08);
+    --price-text: #f0a500;
+    --red: #f85149;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--accent);
+    letter-spacing: 3px;
+  }
+  .logo span { color: var(--text); }
+
+  .tagline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .btn-reset {
+    margin-left: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+  .btn-reset:hover { border-color: var(--red); color: var(--red); }
+
+  main { padding: 24px 20px; max-width: 1700px; margin: 0 auto; }
+
+  .legend {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    padding: 10px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    align-items: center;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 0.7rem;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-muted);
+  }
+  .leg-dot { width: 11px; height: 11px; border-radius: 2px; flex-shrink: 0; }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  .table-wrap {
+    overflow-x: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+
+  thead th {
+    background: var(--surface2);
+    padding: 9px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+    text-align: center;
+  }
+  thead th:last-child { border-right: none; }
+
+  .th-input  { color: var(--text); }
+  .th-fixed  { color: var(--fixed-text); }
+  .th-calc   { color: var(--calc-text); }
+  .th-price  { color: var(--accent); }
+
+  tbody td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    text-align: center;
+    vertical-align: middle;
+  }
+  tbody td:last-child { border-right: none; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(255,255,255,0.015); }
+
+  .td-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: rgba(240,165,0,0.05);
+    text-align: left;
+    padding-left: 16px;
+    min-width: 120px;
+    white-space: nowrap;
+  }
+
+  .td-fixed {
+    background: var(--fixed-bg);
+    color: var(--fixed-text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 0.82rem;
+  }
+
+  .td-calc {
+    background: var(--calc-bg);
+    color: var(--calc-text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    min-width: 90px;
+  }
+
+  .td-price {
+    background: var(--price-bg);
+    color: var(--price-text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.88rem;
+    font-weight: 600;
+    min-width: 100px;
+  }
+
+  input[type="number"] {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    width: 82px;
+    text-align: center;
+    transition: border-color 0.15s, background 0.15s;
+    -moz-appearance: textfield;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+  input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #111827;
+  }
+
+  .inp-price {
+    border-color: rgba(240,165,0,0.35);
+    color: var(--accent);
+    width: 95px;
+  }
+  .inp-price:focus { border-color: var(--accent); }
+
+  @media (max-width: 768px) {
+    header { padding: 12px 14px; flex-wrap: wrap; }
+    main { padding: 14px 8px; }
+    .logo { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">PTD <span>Bags</span></div>
+    <div class="tagline">Pricing Calculator — Century Gate (Meshraq)</div>
+  </div>
+  <button class="btn-reset" onclick="resetAll()">↺ Reset Values</button>
+</header>
+
+<main>
+
+  <div class="legend">
+    <div class="legend-item"><div class="leg-dot" style="background:#30363d;border:1px solid #666"></div>Manual Input</div>
+    <div class="legend-item"><div class="leg-dot" style="background:var(--fixed-bg);border:1px solid var(--fixed-text)"></div>Fixed Value</div>
+    <div class="legend-item"><div class="leg-dot" style="background:var(--calc-bg);border:1px solid var(--calc-text)"></div>Auto Calculated</div>
+    <div class="legend-item"><div class="leg-dot" style="background:var(--price-bg);border:1px solid var(--accent)"></div>Pricing Result</div>
+  </div>
+
+  <!-- TABLE 1 -->
+  <div class="section-label">Table 1 — Bag Specifications &amp; Measurements</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th class="th-input">Length (L)<br><span style="color:var(--text-muted);font-weight:300">cm · manual</span></th>
+          <th class="th-input">Width (W)<br><span style="color:var(--text-muted);font-weight:300">cm · manual</span></th>
+          <th class="th-input">Side Gusset (G)<br><span style="color:var(--text-muted);font-weight:300">cm · manual</span></th>
+          <th class="th-fixed">Overlap<br><span style="font-weight:300">fixed = 4</span></th>
+          <th class="th-input">GSM<br><span style="color:var(--text-muted);font-weight:300">manual</span></th>
+          <th class="th-calc">R/M Width<br><span style="font-weight:300">W+W+G+G+4</span></th>
+          <th class="th-calc">Tube Length<br><span style="font-weight:300">L+2</span></th>
+          <th class="th-calc">Weight / Pc (g)<br><span style="font-weight:300">TL × RMW × GSM ÷ 10000</span></th>
+        </tr>
+      </thead>
+      <tbody id="specsBody"></tbody>
+    </table>
+  </div>
+
+  <!-- TABLE 2 -->
+  <div class="section-label">Table 2 — Price Per Kilogram</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th class="th-price">Price / KG<br><span style="font-weight:300">enter manually</span></th>
+        </tr>
+      </thead>
+      <tbody id="priceKiloBody"></tbody>
+    </table>
+  </div>
+
+  <!-- TABLE 3 -->
+  <div class="section-label">Table 3 — Final Pricing</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th class="th-calc">Price / Pc<br><span style="font-weight:300">Wt/Pc × Price/KG ÷ 1000</span></th>
+          <th class="th-input">Packing (pcs/CTN)<br><span style="color:var(--text-muted);font-weight:300">manual</span></th>
+          <th class="th-calc">Weight / CTN (kg)<br><span style="font-weight:300">Wt/Pc × Packing ÷ 1000</span></th>
+          <th class="th-price">Price / CTN<br><span style="font-weight:300">Packing × Price/Pc</span></th>
+        </tr>
+      </thead>
+      <tbody id="pricingBody"></tbody>
+    </table>
+  </div>
+
+</main>
+
+<script>
+  const BAG_TYPES = [
+    { type: 'POUCH',        L: 12,   W: 10, G: 3,  GSM: 35 },
+    { type: 'POUCH GP',     L: 12,   W: 10, G: 3,  GSM: 35 },
+    { type: 'SMALL SAT',    L: 18,   W: 11, G: 3,  GSM: 50 },
+    { type: 'SMALL SAT GP', L: 18,   W: 11, G: 3,  GSM: 50 },
+    { type: 'LARGE SAT',    L: 40,   W: 20, G: 8,  GSM: 50 },
+    { type: 'SOS',          L: 31.5, W: 24, G: 13, GSM: 60 },
+    { type: 'TH',           L: 35,   W: 31, G: 18, GSM: 90 },
+  ];
+
+  let data = BAG_TYPES.map(b => ({ ...b, pricePerKg: '', packing: '' }));
+
+  function n(v) { const x = parseFloat(v); return isNaN(x) ? 0 : x; }
+
+  function calc(row) {
+    const L = n(row.L), W = n(row.W), G = n(row.G), GSM = n(row.GSM);
+    const rmWidth    = W + W + G + G + 4;
+    const tubeLength = L + 2;
+    const weightPc   = (tubeLength * rmWidth * GSM) / 10000;
+    const pricePerKg = n(row.pricePerKg);
+    const packing    = n(row.packing);
+    const pricePc    = weightPc * pricePerKg / 1000;
+    const weightCtn  = weightPc * packing / 1000;
+    const priceCtn   = packing * pricePc;
+    return { rmWidth, tubeLength, weightPc, pricePc, weightCtn, priceCtn };
+  }
+
+  function fmt(val, decimals) {
+    if (val === 0 || !val) return '—';
+    return parseFloat(val.toFixed(decimals)).toLocaleString('en-US', { maximumFractionDigits: decimals });
+  }
+
+  function set(i, field, val) {
+    data[i][field] = val;
+    render();
+  }
+
+  function render() {
+    document.getElementById('specsBody').innerHTML = data.map((row, i) => {
+      const c = calc(row);
+      return `<tr>
+        <td class="td-type">${row.type}</td>
+        <td><input type="number" value="${row.L}" step="0.5" oninput="set(${i},'L',this.value)"></td>
+        <td><input type="number" value="${row.W}" step="0.5" oninput="set(${i},'W',this.value)"></td>
+        <td><input type="number" value="${row.G}" step="0.5" oninput="set(${i},'G',this.value)"></td>
+        <td class="td-fixed">4</td>
+        <td><input type="number" value="${row.GSM}" step="1" oninput="set(${i},'GSM',this.value)"></td>
+        <td class="td-calc">${fmt(c.rmWidth,1)}</td>
+        <td class="td-calc">${fmt(c.tubeLength,1)}</td>
+        <td class="td-calc">${fmt(c.weightPc,4)}</td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('priceKiloBody').innerHTML = data.map((row, i) => `<tr>
+      <td class="td-type">${row.type}</td>
+      <td><input type="number" value="${row.pricePerKg}" step="0.01" placeholder="0.00" class="inp-price" oninput="set(${i},'pricePerKg',this.value)"></td>
+    </tr>`).join('');
+
+    document.getElementById('pricingBody').innerHTML = data.map((row, i) => {
+      const c = calc(row);
+      const hasPpkg = n(row.pricePerKg) > 0;
+      const hasPack = n(row.packing) > 0;
+      return `<tr>
+        <td class="td-type">${row.type}</td>
+        <td class="td-calc">${hasPpkg && c.weightPc ? fmt(c.pricePc,6) : '—'}</td>
+        <td><input type="number" value="${row.packing}" step="1" placeholder="0" oninput="set(${i},'packing',this.value)"></td>
+        <td class="td-calc">${c.weightPc && hasPack ? fmt(c.weightCtn,4) : '—'}</td>
+        <td class="td-price">${c.priceCtn ? fmt(c.priceCtn,3) : '—'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function resetAll() {
+    if (confirm('Reset all manually entered values?')) {
+      data = BAG_TYPES.map(b => ({ ...b, pricePerKg: '', packing: '' }));
+      render();
+    }
+  }
+
+  render();
+</script>
+</body>
+</html>
