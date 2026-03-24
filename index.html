@@ -3,831 +3,473 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PTD Bags — Pricing Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="PTD Bags">
+<meta name="theme-color" content="#080c10">
 <meta name="color-scheme" content="dark">
-<style>html,body{background:#080c10!important;background-color:#080c10!important;}</style>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>PTD Bags</title>
 <style>
+html, body { background: #080c10 !important; background-color: #080c10 !important; }
+
 :root {
-  --bg:          #080c10;
-  --bg1:         #0e1419;
-  --bg2:         #131920;
-  --bg3:         #192130;
-  --border:      #1e2d3d;
-  --border2:     #253445;
-  --accent:      #e8a020;
-  --accent2:     #ffbe4d;
-  --blue:        #3d9dea;
-  --green:       #2eca7f;
-  --text:        #d4dde8;
-  --text-dim:    #5a6e82;
-  --text-muted:  #3a4d60;
-  --red:         #e05252;
-  --input-bg:    #0b1017;
-  --shadow:      0 8px 32px rgba(0,0,0,0.5);
+–bg:         #080c10;
+–bg1:        #0d1318;
+–bg2:        #111820;
+–bg3:        #16202c;
+–border:     #1c2a38;
+–border2:    #223040;
+–accent:     #e8a020;
+–accent2:    #ffbe4d;
+–blue:       #3d9dea;
+–green:      #2eca7f;
+–text:       #cdd6e0;
+–text-dim:   #546678;
+–text-muted: #2e3f50;
+–red:        #e05252;
+–input-bg:   #090d12;
+–f:   -apple-system, BlinkMacSystemFont, ‘Helvetica Neue’, Arial, sans-serif;
+–fm:  ‘Menlo’, ‘Monaco’, ‘SF Mono’, ‘Courier New’, monospace;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
-background: #080c10 !important;
 color-scheme: dark;
+-webkit-text-size-adjust: 100%;
+height: -webkit-fill-available;
 }
 
 body {
-background: #080c10 !important;
-background-color: #080c10 !important;
+background: var(–bg);
 color: var(–text);
-font-family: ‘Barlow Condensed’, sans-serif;
+font-family: var(–f);
 min-height: 100vh;
+min-height: -webkit-fill-available;
 overflow-x: hidden;
+-webkit-font-smoothing: antialiased;
 }
 
-/* Subtle grid background */
 body::before {
 content: ‘’;
-position: fixed;
-inset: 0;
-background-image:
-linear-gradient(rgba(61,157,234,0.03) 1px, transparent 1px),
-linear-gradient(90deg, rgba(61,157,234,0.03) 1px, transparent 1px);
-background-size: 40px 40px;
-pointer-events: none;
-z-index: 0;
+position: fixed; inset: 0;
+background-image: radial-gradient(circle, rgba(61,157,234,0.06) 1px, transparent 1px);
+background-size: 26px 26px;
+pointer-events: none; z-index: 0;
 }
 
-/* ─── HEADER ─────────────────────────────────────────── */
+/* MODAL */
+.modal-overlay {
+display: none; position: fixed; inset: 0;
+background: rgba(0,0,0,0.8); z-index: 9999;
+align-items: center; justify-content: center;
+backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.modal-overlay.on { display: flex; }
+.modal {
+background: var(–bg2); border: 1px solid var(–border2);
+border-radius: 16px; padding: 28px 24px 22px;
+max-width: 320px; width: 86%; text-align: center;
+box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+}
+.m-icon {
+width: 46px; height: 46px; border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+margin: 0 auto 14px; font-size: 1.2rem; font-family: var(–fm);
+}
+.m-icon.red { background: rgba(224,82,82,0.1); color: var(–red); border: 1px solid rgba(224,82,82,0.3); }
+.m-icon.blu { background: rgba(61,157,234,0.1); color: var(–blue); border: 1px solid rgba(61,157,234,0.3); }
+.m-title { font-weight: 700; font-size: 0.95rem; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+.m-body  { font-family: var(–fm); font-size: 0.66rem; color: var(–text-dim); line-height: 1.8; margin-bottom: 22px; }
+.m-btns  { display: flex; gap: 10px; }
+
+/* HEADER */
 header {
-position: relative;
-z-index: 10;
-background: linear-gradient(180deg, #0d1520 0%, #0a111a 100%);
+position: relative; z-index: 10;
+background: linear-gradient(180deg, #0c1520 0%, #090f18 100%);
 border-bottom: 1px solid var(–border2);
-padding: 0 32px;
-display: flex;
-align-items: center;
-gap: 0;
-height: 70px;
-box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+padding: 0 18px 16px;
+padding-top: max(18px, env(safe-area-inset-top, 18px));
+box-shadow: 0 4px 20px rgba(0,0,0,0.6);
 }
+.h-bar {
+position: absolute; top: 0; left: 0; right: 0; height: 3px;
+background: linear-gradient(90deg, var(–accent) 0%, var(–accent2) 30%, transparent 68%);
+}
+.h-row1 { display: flex; align-items: center; gap: 12px; margin-top: 14px; margin-bottom: 13px; }
+.h-logo-box {
+width: 40px; height: 40px; flex-shrink: 0;
+background: linear-gradient(135deg, var(–accent) 0%, #b07010 100%);
+border-radius: 9px;
+display: flex; align-items: center; justify-content: center;
+font-family: var(–fm); font-weight: 700; font-size: 0.7rem;
+color: #000; letter-spacing: 0.5px;
+box-shadow: 0 0 16px rgba(232,160,32,0.4);
+}
+.h-name { font-weight: 700; font-size: 1.22rem; letter-spacing: 3px; color: var(–text); line-height: 1; }
+.h-name em { color: var(–accent); font-style: normal; }
+.h-sub {
+font-family: var(–fm); font-size: 0.52rem;
+color: var(–text-muted); letter-spacing: 2px;
+text-transform: uppercase; display: block; margin-top: 5px;
+}
+.h-loc {
+font-family: var(–fm); font-size: 0.58rem;
+color: var(–blue); letter-spacing: 1.5px; text-transform: uppercase;
+margin-bottom: 13px;
+display: flex; align-items: center; gap: 7px;
+}
+.h-dot { width: 6px; height: 6px; border-radius: 50%; background: var(–blue); box-shadow: 0 0 6px var(–blue); }
+.h-btns { display: flex; gap: 10px; }
 
-.header-accent-bar {
-position: absolute;
-top: 0; left: 0; right: 0;
-height: 3px;
-background: linear-gradient(90deg, var(–accent) 0%, var(–accent2) 30%, transparent 70%);
-}
-
-.logo-block {
-display: flex;
-align-items: center;
-gap: 16px;
-padding-right: 32px;
-border-right: 1px solid var(–border);
-margin-right: 28px;
-}
-
-.logo-icon {
-width: 38px;
-height: 38px;
-background: linear-gradient(135deg, var(–accent) 0%, #c8820a 100%);
-border-radius: 6px;
-display: flex;
-align-items: center;
-justify-content: center;
-font-family: ‘Rajdhani’, sans-serif;
-font-weight: 700;
-font-size: 0.9rem;
-color: #000;
-letter-spacing: 1px;
-box-shadow: 0 0 20px rgba(232,160,32,0.3);
-flex-shrink: 0;
-}
-
-.logo-text {
-display: flex;
-flex-direction: column;
-}
-.logo-main {
-font-family: ‘Rajdhani’, sans-serif;
-font-weight: 700;
-font-size: 1.5rem;
-letter-spacing: 4px;
-color: var(–text);
-line-height: 1;
-}
-.logo-main span { color: var(–accent); }
-.logo-sub {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.58rem;
-color: var(–text-dim);
-letter-spacing: 2.5px;
-text-transform: uppercase;
-margin-top: 3px;
-}
-
-.header-meta {
-display: flex;
-flex-direction: column;
-}
-.header-location {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.64rem;
-color: var(–blue);
-letter-spacing: 1.5px;
-text-transform: uppercase;
-}
-.header-desc {
-font-size: 0.82rem;
-color: var(–text-dim);
-font-weight: 400;
-letter-spacing: 0.5px;
-margin-top: 2px;
-}
-
-.header-actions {
-margin-left: auto;
-display: flex;
-gap: 10px;
-align-items: center;
-}
-
+/* BUTTONS */
 .btn {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.68rem;
-font-weight: 700;
-padding: 8px 18px;
-border-radius: 4px;
-cursor: pointer;
-letter-spacing: 1.5px;
-text-transform: uppercase;
-transition: all 0.18s ease;
-display: flex;
-align-items: center;
-gap: 7px;
+flex: 1; font-family: var(–fm); font-size: 0.6rem; font-weight: 600;
+padding: 11px 10px; border-radius: 8px; cursor: pointer;
+letter-spacing: 1.2px; text-transform: uppercase;
+display: flex; align-items: center; justify-content: center; gap: 6px;
 border: 1px solid transparent;
-white-space: nowrap;
+-webkit-tap-highlight-color: transparent;
+transition: opacity 0.12s;
 }
+.btn:active { opacity: 0.6; }
+.btn-red  { background: rgba(224,82,82,0.1); border-color: rgba(224,82,82,0.45); color: var(–red); }
+.btn-dim  { background: rgba(255,255,255,0.03); border-color: var(–border2); color: var(–text-dim); }
+.btn-sm   { flex: none; font-size: 0.58rem; padding: 9px 16px; }
 
-.btn-clear {
-background: transparent;
-border-color: var(–red);
-color: var(–red);
-}
-.btn-clear:hover {
-background: rgba(224,82,82,0.12);
-box-shadow: 0 0 16px rgba(224,82,82,0.2);
-transform: translateY(-1px);
-}
-
-.btn-reset {
-background: transparent;
-border-color: var(–border2);
-color: var(–text-dim);
-}
-.btn-reset:hover {
-border-color: var(–accent);
-color: var(–accent);
-transform: translateY(-1px);
-}
-
-/* ─── MAIN ───────────────────────────────────────────── */
+/* MAIN */
 main {
-position: relative;
-z-index: 1;
-padding: 28px 28px;
-max-width: 1800px;
-margin: 0 auto;
+position: relative; z-index: 1;
+padding: 16px 12px;
+padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
 }
 
-/* ─── LEGEND ─────────────────────────────────────────── */
+/* LEGEND */
 .legend {
-display: flex;
-gap: 0;
-margin-bottom: 24px;
-background: var(–bg1);
-border: 1px solid var(–border);
-border-radius: 6px;
-overflow: hidden;
+display: grid; grid-template-columns: 1fr 1fr;
+background: var(–bg1); border: 1px solid var(–border);
+border-radius: 8px; overflow: hidden; margin-bottom: 18px;
 }
-.legend-item {
-display: flex;
-align-items: center;
-gap: 9px;
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.63rem;
-color: var(–text-dim);
-padding: 10px 20px;
-letter-spacing: 1px;
-text-transform: uppercase;
-border-right: 1px solid var(–border);
-transition: background 0.15s;
+.leg-item {
+display: flex; align-items: center; gap: 7px;
+font-family: var(–fm); font-size: 0.55rem;
+color: var(–text-dim); letter-spacing: 1px; text-transform: uppercase;
+padding: 9px 12px; border-right: 1px solid var(–border); border-bottom: 1px solid var(–border);
 }
-.legend-item:last-child { border-right: none; }
-.legend-item:hover { background: rgba(255,255,255,0.02); }
-.leg-pip {
-width: 8px;
-height: 8px;
-border-radius: 50%;
-flex-shrink: 0;
-}
+.leg-item:nth-child(2n) { border-right: none; }
+.leg-item:nth-child(3),
+.leg-item:nth-child(4)  { border-bottom: none; }
+.leg-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-/* ─── SECTION HEADER ─────────────────────────────────── */
-.section-header {
-display: flex;
-align-items: center;
-gap: 14px;
-margin-bottom: 10px;
-margin-top: 6px;
+/* SECTION */
+.sh { display: flex; align-items: center; gap: 10px; margin: 4px 0 8px; }
+.sh-badge {
+font-family: var(–fm); font-size: 0.53rem; color: var(–accent);
+background: rgba(232,160,32,0.1); border: 1px solid rgba(232,160,32,0.22);
+padding: 3px 8px; border-radius: 3px; letter-spacing: 1px; white-space: nowrap;
 }
-.section-num {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.58rem;
-color: var(–accent);
-background: rgba(232,160,32,0.1);
-border: 1px solid rgba(232,160,32,0.25);
-padding: 3px 8px;
-border-radius: 3px;
-letter-spacing: 1px;
+.sh-title {
+font-family: var(–fm); font-size: 0.56rem;
+letter-spacing: 2.5px; text-transform: uppercase; color: var(–text-dim);
 }
-.section-title {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.63rem;
-letter-spacing: 3px;
-text-transform: uppercase;
-color: var(–text-dim);
-}
-.section-line {
-flex: 1;
-height: 1px;
-background: linear-gradient(90deg, var(–border2) 0%, transparent 100%);
-}
+.sh-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(–border2), transparent); }
 
-/* ─── TABLE ──────────────────────────────────────────── */
-.table-wrap {
-overflow-x: auto;
-background: var(–bg1);
-border: 1px solid var(–border2);
-border-radius: 8px;
-margin-bottom: 28px;
-box-shadow: var(–shadow);
+/* TABLE */
+.tw {
+overflow-x: auto; -webkit-overflow-scrolling: touch;
+background: var(–bg1); border: 1px solid var(–border2);
+border-radius: 8px; margin-bottom: 20px;
+box-shadow: 0 6px 22px rgba(0,0,0,0.4);
 }
+table { width: 100%; border-collapse: collapse; }
 
-table {
-width: 100%;
-border-collapse: collapse;
-font-size: 0.85rem;
-}
-
-/* Header row */
-thead tr:first-child th {
+thead th {
 background: var(–bg3);
-padding: 12px 14px 10px;
+padding: 10px 10px 8px;
 border-bottom: 1px solid var(–border2);
 border-right: 1px solid var(–border2);
-white-space: nowrap;
-position: relative;
+white-space: nowrap; text-align: center; position: relative;
 }
-thead tr:first-child th:last-child { border-right: none; }
+thead th:last-child { border-right: none; }
 
-.th-label {
-font-family: ‘Rajdhani’, sans-serif;
-font-weight: 700;
-font-size: 0.78rem;
-letter-spacing: 2px;
-text-transform: uppercase;
-display: block;
-margin-bottom: 2px;
+.thl { display: block; font-weight: 700; font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 2px; }
+.ths { display: block; font-family: var(–fm); font-size: 0.48rem; color: var(–text-muted); letter-spacing: 0.3px; }
+
+.th-tp  { text-align: left !important; padding-left: 14px !important; }
+.th-tp .thl { color: var(–accent); }
+.th-in  .thl { color: var(–text); }
+.th-fx  .thl { color: var(–blue); }
+.th-cl  .thl { color: var(–green); }
+.th-pr  .thl { color: var(–accent); }
+
+.th-in::after, .th-fx::after, .th-cl::after, .th-pr::after {
+content: ‘’; position: absolute; top: 0; left: 0; right: 0; height: 2px;
 }
-.th-sub {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.56rem;
-letter-spacing: 0.5px;
-color: var(–text-muted);
-font-weight: 400;
-display: block;
-}
+.th-in::after { background: rgba(205,214,224,0.2); }
+.th-fx::after { background: var(–blue);  opacity: 0.6; }
+.th-cl::after { background: var(–green); opacity: 0.6; }
+.th-pr::after { background: var(–accent); opacity: 0.85; }
 
-/* Column group indicator line at top */
-thead th.th-input .th-label  { color: var(–text); }
-thead th.th-fixed .th-label  { color: var(–blue); }
-thead th.th-calc  .th-label  { color: var(–green); }
-thead th.th-price .th-label  { color: var(–accent); }
-
-thead th.th-input::after  { content:’’; position:absolute; top:0; left:0; right:0; height:2px; background:var(–text-muted); opacity:0.3; }
-thead th.th-fixed::after  { content:’’; position:absolute; top:0; left:0; right:0; height:2px; background:var(–blue); opacity:0.7; }
-thead th.th-calc::after   { content:’’; position:absolute; top:0; left:0; right:0; height:2px; background:var(–green); opacity:0.7; }
-thead th.th-price::after  { content:’’; position:absolute; top:0; left:0; right:0; height:2px; background:var(–accent); opacity:0.9; }
-
-/* Body cells */
 tbody td {
-padding: 8px 12px;
+padding: 7px 9px;
 border-bottom: 1px solid var(–border);
 border-right: 1px solid var(–border);
-text-align: center;
-vertical-align: middle;
+text-align: center; vertical-align: middle; font-size: 0.78rem;
 }
 tbody td:last-child { border-right: none; }
 tbody tr:last-child td { border-bottom: none; }
 
-tbody tr:hover td { background: rgba(255,255,255,0.012); }
-tbody tr:hover .td-type { background: rgba(232,160,32,0.09); }
-
-/* Type cell */
-.td-type {
-font-family: ‘Rajdhani’, sans-serif;
-font-weight: 700;
-font-size: 0.9rem;
-letter-spacing: 2px;
-color: var(–accent);
-background: rgba(232,160,32,0.04);
-text-align: left;
-padding-left: 18px;
-min-width: 130px;
-white-space: nowrap;
+.td-tp {
+font-weight: 700; font-size: 0.8rem; letter-spacing: 1.5px;
+color: var(–accent); background: rgba(232,160,32,0.04);
+text-align: left !important; padding-left: 14px !important;
+white-space: nowrap; min-width: 110px;
 border-right: 1px solid var(–border2) !important;
-border-bottom: 1px solid var(–border) !important;
 }
-
-/* Fixed value cell */
-.td-fixed {
-background: rgba(61,157,234,0.05);
-color: var(–blue);
-font-family: ‘JetBrains Mono’, monospace;
-font-weight: 500;
-font-size: 0.8rem;
-border-right: 1px solid rgba(61,157,234,0.12) !important;
-border-bottom: 1px solid rgba(61,157,234,0.08) !important;
+.td-fx {
+background: rgba(61,157,234,0.05); color: var(–blue);
+font-family: var(–fm); font-size: 0.76rem; font-weight: 500;
+border-right: 1px solid rgba(61,157,234,0.1) !important;
+border-bottom: 1px solid rgba(61,157,234,0.06) !important;
 }
-
-/* Auto-calc cell */
-.td-calc {
-background: rgba(46,202,127,0.04);
-color: var(–green);
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.8rem;
-font-weight: 500;
-min-width: 95px;
-border-right: 1px solid rgba(46,202,127,0.1) !important;
-border-bottom: 1px solid rgba(46,202,127,0.06) !important;
+.td-cl {
+background: rgba(46,202,127,0.04); color: var(–green);
+font-family: var(–fm); font-size: 0.76rem; font-weight: 500;
+min-width: 86px;
+border-right: 1px solid rgba(46,202,127,0.08) !important;
+border-bottom: 1px solid rgba(46,202,127,0.05) !important;
 }
-.td-calc.td-empty { color: var(–text-muted); font-size: 0.72rem; }
-
-/* Price result cell */
-.td-price {
-background: rgba(232,160,32,0.06);
-color: var(–accent);
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.85rem;
-font-weight: 700;
-min-width: 110px;
-border-right: 1px solid rgba(232,160,32,0.15) !important;
-border-bottom: 1px solid rgba(232,160,32,0.1) !important;
-letter-spacing: 0.5px;
+.td-cl.e { color: var(–text-muted); font-size: 0.68rem; }
+.td-pr {
+background: rgba(232,160,32,0.06); color: var(–accent);
+font-family: var(–fm); font-size: 0.8rem; font-weight: 700;
+min-width: 96px;
+border-right: 1px solid rgba(232,160,32,0.12) !important;
+border-bottom: 1px solid rgba(232,160,32,0.08) !important;
 }
-.td-price.td-empty { color: var(–text-muted); font-size: 0.72rem; font-weight: 400; }
+.td-pr.e { color: var(–text-muted); font-size: 0.68rem; font-weight: 400; }
 
-/* ─── INPUTS ─────────────────────────────────────────── */
+/* INPUTS */
 input[type=“number”] {
-background: var(–input-bg);
-border: 1px solid var(–border2);
-color: var(–text);
-padding: 6px 8px;
-border-radius: 4px;
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.8rem;
-width: 86px;
-text-align: center;
-transition: border-color 0.15s, box-shadow 0.15s;
--moz-appearance: textfield;
+background: var(–input-bg); border: 1px solid var(–border2);
+color: var(–text); padding: 7px 5px; border-radius: 5px;
+font-family: var(–fm); font-size: 0.74rem;
+width: 76px; text-align: center;
+-moz-appearance: textfield; -webkit-appearance: none; appearance: none;
 }
 input[type=“number”]::-webkit-inner-spin-button,
 input[type=“number”]::-webkit-outer-spin-button { -webkit-appearance: none; }
 input[type=“number”]:focus {
-outline: none;
-border-color: var(–accent);
-box-shadow: 0 0 0 2px rgba(232,160,32,0.12);
-background: #0d141e;
+outline: none; border-color: var(–accent);
+box-shadow: 0 0 0 2px rgba(232,160,32,0.14);
+background: #0c1018;
 }
-input[type=“number”]::placeholder { color: var(–text-muted); font-size: 0.72rem; }
+.inp-pr { border-color: rgba(232,160,32,0.28); color: var(–accent); width: 92px; }
+.inp-pr:focus { border-color: var(–accent); }
 
-.inp-price {
-border-color: rgba(232,160,32,0.3);
-color: var(–accent);
-width: 100px;
-}
-.inp-price:focus {
-border-color: var(–accent);
-box-shadow: 0 0 0 2px rgba(232,160,32,0.15);
-}
-
-/* ─── FOOTER ─────────────────────────────────────────── */
+/* FOOTER */
 footer {
-position: relative;
-z-index: 1;
-text-align: center;
-padding: 18px;
-border-top: 1px solid var(–border);
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.58rem;
-color: var(–text-muted);
-letter-spacing: 1px;
+position: relative; z-index: 1; text-align: center;
+padding: 14px; border-top: 1px solid var(–border);
+font-family: var(–fm); font-size: 0.52rem;
+color: var(–text-muted); letter-spacing: 1.5px;
+padding-bottom: max(14px, env(safe-area-inset-bottom, 14px));
 }
-
-/* ─── RESPONSIVE ─────────────────────────────────────── */
-@media (max-width: 768px) {
-header { padding: 0 14px; height: auto; padding-top: 14px; padding-bottom: 14px; flex-wrap: wrap; gap: 12px; }
-.logo-block { padding-right: 16px; margin-right: 16px; }
-main { padding: 14px 10px; }
-.legend { flex-wrap: wrap; }
-.legend-item { font-size: 0.58rem; padding: 8px 12px; }
-.header-actions { margin-left: 0; width: 100%; }
-}
-
-/* ─── MODAL OVERLAY ──────────────────────────────────── */
-.modal-overlay {
-display: none;
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.7);
-z-index: 1000;
-align-items: center;
-justify-content: center;
-backdrop-filter: blur(4px);
-}
-.modal-overlay.active { display: flex; }
-.modal {
-background: var(–bg2);
-border: 1px solid var(–border2);
-border-radius: 10px;
-padding: 32px 36px;
-max-width: 420px;
-width: 90%;
-box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-text-align: center;
-}
-.modal-icon {
-width: 52px; height: 52px;
-border-radius: 50%;
-display: flex; align-items: center; justify-content: center;
-margin: 0 auto 18px;
-font-size: 1.4rem;
-}
-.modal-icon.danger { background: rgba(224,82,82,0.12); color: var(–red); border: 1px solid rgba(224,82,82,0.3); }
-.modal-title {
-font-family: ‘Rajdhani’, sans-serif;
-font-weight: 700;
-font-size: 1.3rem;
-letter-spacing: 2px;
-text-transform: uppercase;
-margin-bottom: 8px;
-}
-.modal-body {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 0.7rem;
-color: var(–text-dim);
-line-height: 1.7;
-margin-bottom: 24px;
-}
-.modal-actions { display: flex; gap: 10px; justify-content: center; }
 </style>
 
 </head>
 <body>
 
-<!-- Confirm Modal -->
+<!-- MODAL -->
 
-<div class="modal-overlay" id="confirmModal">
+<div class="modal-overlay" id="modal">
   <div class="modal">
-    <div class="modal-icon danger" id="modalIcon">⚠</div>
-    <div class="modal-title" id="modalTitle">Confirm Clear</div>
-    <div class="modal-body" id="modalBody">This action cannot be undone.</div>
-    <div class="modal-actions">
-      <button class="btn btn-reset" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-clear" id="modalConfirmBtn">Confirm</button>
+    <div class="m-icon" id="mi"></div>
+    <div class="m-title" id="mt"></div>
+    <div class="m-body" id="mb"></div>
+    <div class="m-btns">
+      <button class="btn btn-dim btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-sm" id="mc"></button>
     </div>
   </div>
 </div>
 
-<header>
-  <div class="header-accent-bar"></div>
+<!-- HEADER -->
 
-  <div class="logo-block">
-    <div class="logo-icon">PTD</div>
-    <div class="logo-text">
-      <div class="logo-main">PTD <span>Bags</span></div>
-      <div class="logo-sub">Industrial Pricing System</div>
+<header>
+  <div class="h-bar"></div>
+  <div class="h-row1">
+    <div class="h-logo-box">PTD</div>
+    <div>
+      <div class="h-name">PTD <em>Bags</em></div>
+      <span class="h-sub">Industrial Pricing System</span>
     </div>
   </div>
-
-  <div class="header-meta">
-    <div class="header-location">● Century Gate — Meshraq</div>
-    <div class="header-desc">Bag Specifications &amp; Cost Calculator</div>
+  <div class="h-loc">
+    <div class="h-dot"></div>
+    Century Gate
   </div>
-
-  <div class="header-actions">
-    <button class="btn btn-clear" onclick="showModal('clear')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+  <div class="h-btns">
+    <button class="btn btn-red" onclick="showModal('clear')">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
       Clear All Entries
     </button>
-    <button class="btn btn-reset" onclick="showModal('reset')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+    <button class="btn btn-dim" onclick="showModal('reset')">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
       Reset Defaults
     </button>
   </div>
 </header>
 
 <main>
-
-  <!-- Legend -->
-
+  <!-- LEGEND -->
   <div class="legend">
-    <div class="legend-item">
-      <div class="leg-pip" style="background:var(--text-dim);"></div>
-      Manual Input
-    </div>
-    <div class="legend-item">
-      <div class="leg-pip" style="background:var(--blue);"></div>
-      Fixed Value
-    </div>
-    <div class="legend-item">
-      <div class="leg-pip" style="background:var(--green);"></div>
-      Auto Calculated
-    </div>
-    <div class="legend-item">
-      <div class="leg-pip" style="background:var(--accent);"></div>
-      Pricing Result
-    </div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--text-dim)"></div>Manual Input</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>Fixed Value</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Auto Calculated</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent)"></div>Pricing Result</div>
   </div>
 
-  <!-- TABLE 1 -->
+  <!-- TABLE 01 -->
 
-  <div class="section-header">
-    <div class="section-num">TABLE 01</div>
-    <div class="section-title">Bag Specifications &amp; Measurements</div>
-    <div class="section-line"></div>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th style="text-align:left;padding-left:18px;border-right:1px solid var(--border2);">
-            <span class="th-label" style="color:var(--accent);font-size:0.72rem;">TYPE</span>
-          </th>
-          <th class="th-input">
-            <span class="th-label">Length (L)</span>
-            <span class="th-sub">cm · manual</span>
-          </th>
-          <th class="th-input">
-            <span class="th-label">Width (W)</span>
-            <span class="th-sub">cm · manual</span>
-          </th>
-          <th class="th-input">
-            <span class="th-label">Side Gusset (G)</span>
-            <span class="th-sub">cm · manual</span>
-          </th>
-          <th class="th-fixed">
-            <span class="th-label">Overlap</span>
-            <span class="th-sub">fixed = 4</span>
-          </th>
-          <th class="th-input">
-            <span class="th-label">GSM</span>
-            <span class="th-sub">manual</span>
-          </th>
-          <th class="th-calc">
-            <span class="th-label">R/M Width</span>
-            <span class="th-sub">W+W+G+G+4</span>
-          </th>
-          <th class="th-calc">
-            <span class="th-label">Tube Length</span>
-            <span class="th-sub">L + 2</span>
-          </th>
-          <th class="th-calc">
-            <span class="th-label">Weight / Pc (g)</span>
-            <span class="th-sub">TL × RMW × GSM ÷ 10000</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody id="specsBody"></tbody>
-    </table>
-  </div>
+  <div class="sh"><div class="sh-badge">TABLE 01</div><div class="sh-title">Bag Specifications &amp; Measurements</div><div class="sh-line"></div></div>
+  <div class="tw"><table>
+    <thead><tr>
+      <th class="th-tp"><span class="thl">Type</span></th>
+      <th class="th-in"><span class="thl">Length (L)</span><span class="ths">cm · manual</span></th>
+      <th class="th-in"><span class="thl">Width (W)</span><span class="ths">cm · manual</span></th>
+      <th class="th-in"><span class="thl">Gusset (G)</span><span class="ths">cm · manual</span></th>
+      <th class="th-fx"><span class="thl">Overlap</span><span class="ths">fixed = 4</span></th>
+      <th class="th-in"><span class="thl">GSM</span><span class="ths">manual</span></th>
+      <th class="th-cl"><span class="thl">R/M Width</span><span class="ths">W+W+G+G+4</span></th>
+      <th class="th-cl"><span class="thl">Tube Length</span><span class="ths">L + 2</span></th>
+      <th class="th-cl"><span class="thl">Weight/Pc (g)</span><span class="ths">TL×RMW×GSM÷10000</span></th>
+    </tr></thead>
+    <tbody id="t1"></tbody>
+  </table></div>
 
-  <!-- TABLE 2 -->
+  <!-- TABLE 02 -->
 
-  <div class="section-header">
-    <div class="section-num">TABLE 02</div>
-    <div class="section-title">Price Per Kilogram</div>
-    <div class="section-line"></div>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th style="text-align:left;padding-left:18px;border-right:1px solid var(--border2);">
-            <span class="th-label" style="color:var(--accent);font-size:0.72rem;">TYPE</span>
-          </th>
-          <th class="th-price">
-            <span class="th-label">Price / KG</span>
-            <span class="th-sub">enter manually</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody id="priceKiloBody"></tbody>
-    </table>
-  </div>
+  <div class="sh"><div class="sh-badge">TABLE 02</div><div class="sh-title">Price Per Kilogram</div><div class="sh-line"></div></div>
+  <div class="tw"><table>
+    <thead><tr>
+      <th class="th-tp"><span class="thl">Type</span></th>
+      <th class="th-pr"><span class="thl">Price / KG</span><span class="ths">enter manually</span></th>
+    </tr></thead>
+    <tbody id="t2"></tbody>
+  </table></div>
 
-  <!-- TABLE 3 -->
+  <!-- TABLE 03 -->
 
-  <div class="section-header">
-    <div class="section-num">TABLE 03</div>
-    <div class="section-title">Final Pricing</div>
-    <div class="section-line"></div>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th style="text-align:left;padding-left:18px;border-right:1px solid var(--border2);">
-            <span class="th-label" style="color:var(--accent);font-size:0.72rem;">TYPE</span>
-          </th>
-          <th class="th-calc">
-            <span class="th-label">Price / Pc</span>
-            <span class="th-sub">Wt/Pc × Price/KG ÷ 1000</span>
-          </th>
-          <th class="th-input">
-            <span class="th-label">Packing (pcs/CTN)</span>
-            <span class="th-sub">manual</span>
-          </th>
-          <th class="th-calc">
-            <span class="th-label">Weight / CTN (kg)</span>
-            <span class="th-sub">Wt/Pc × Packing ÷ 1000</span>
-          </th>
-          <th class="th-price">
-            <span class="th-label">Price / CTN</span>
-            <span class="th-sub">Packing × Price/Pc</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody id="pricingBody"></tbody>
-    </table>
-  </div>
-
+  <div class="sh"><div class="sh-badge">TABLE 03</div><div class="sh-title">Final Pricing</div><div class="sh-line"></div></div>
+  <div class="tw"><table>
+    <thead><tr>
+      <th class="th-tp"><span class="thl">Type</span></th>
+      <th class="th-cl"><span class="thl">Price / Pc</span><span class="ths">Wt/Pc × Price/KG ÷ 1000</span></th>
+      <th class="th-in"><span class="thl">Packing (pcs/CTN)</span><span class="ths">manual</span></th>
+      <th class="th-cl"><span class="thl">Weight/CTN (kg)</span><span class="ths">Wt/Pc × Packing ÷ 1000</span></th>
+      <th class="th-pr"><span class="thl">Price / CTN</span><span class="ths">Packing × Price/Pc</span></th>
+    </tr></thead>
+    <tbody id="t3"></tbody>
+  </table></div>
 </main>
 
-<footer>PTD BAGS · CENTURY GATE · MESHRAQ · PRICING CALCULATOR v2.0</footer>
+<footer>PTD BAGS &nbsp;·&nbsp; CENTURY GATE &nbsp;·&nbsp; PRICING CALCULATOR v2.2</footer>
 
 <script>
-const BAG_DEFAULTS = [
-  { type: 'POUCH',        L: 12,   W: 10, G: 3,  GSM: 35 },
-  { type: 'POUCH GP',     L: 12,   W: 10, G: 3,  GSM: 35 },
-  { type: 'SMALL SAT',    L: 18,   W: 11, G: 3,  GSM: 50 },
-  { type: 'SMALL SAT GP', L: 18,   W: 11, G: 3,  GSM: 50 },
-  { type: 'LARGE SAT',    L: 40,   W: 20, G: 8,  GSM: 50 },
-  { type: 'SOS',          L: 31.5, W: 24, G: 13, GSM: 60 },
-  { type: 'TH',           L: 35,   W: 31, G: 18, GSM: 90 },
+const DEF = [
+  {type:'POUCH',        L:12,   W:10, G:3,  GSM:35},
+  {type:'POUCH GP',     L:12,   W:10, G:3,  GSM:35},
+  {type:'SMALL SAT',    L:18,   W:11, G:3,  GSM:50},
+  {type:'SMALL SAT GP', L:18,   W:11, G:3,  GSM:50},
+  {type:'LARGE SAT',    L:40,   W:20, G:8,  GSM:50},
+  {type:'SOS',          L:31.5, W:24, G:13, GSM:60},
+  {type:'TH',           L:35,   W:31, G:18, GSM:90},
 ];
 
-// Empty L/W/G/GSM initially — all manual
-let data = BAG_DEFAULTS.map(b => ({
-  type:       b.type,
-  L:          '',
-  W:          '',
-  G:          '',
-  GSM:        '',
-  pricePerKg: '',
-  packing:    ''
-}));
+let R = DEF.map(b=>({type:b.type,L:'',W:'',G:'',GSM:'',ppkg:'',pack:''}));
 
-function n(v) { const x = parseFloat(v); return isNaN(x) ? 0 : x; }
-function hasVal(v) { return v !== '' && v !== null && v !== undefined; }
+const nv=v=>{const x=parseFloat(v);return isNaN(x)?0:x;};
+const ok=v=>v!==''&&v!==null&&v!==undefined;
+const iv=v=>ok(v)?v:'';
 
-function calc(row) {
-  const L = n(row.L), W = n(row.W), G = n(row.G), GSM = n(row.GSM);
-  const hasSpecs = hasVal(row.L) && hasVal(row.W);
-  const rmWidth    = hasSpecs ? W + W + G + G + 4 : 0;
-  const tubeLength = hasVal(row.L) ? L + 2 : 0;
-  const weightPc   = (rmWidth && tubeLength && GSM) ? (tubeLength * rmWidth * GSM) / 10000 : 0;
-  const pricePerKg = n(row.pricePerKg);
-  const packing    = n(row.packing);
-  const pricePc    = (weightPc && pricePerKg) ? weightPc * pricePerKg / 1000 : 0;
-  const weightCtn  = (weightPc && packing)    ? weightPc * packing / 1000    : 0;
-  const priceCtn   = (pricePc  && packing)    ? packing  * pricePc           : 0;
-  return { rmWidth, tubeLength, weightPc, pricePc, weightCtn, priceCtn };
+function calc(r){
+  const L=nv(r.L),W=nv(r.W),G=nv(r.G),GSM=nv(r.GSM);
+  const rmw=(ok(r.W)&&ok(r.G))?W+W+G+G+4:0;
+  const tl=ok(r.L)?L+2:0;
+  const wpc=(rmw&&tl&&GSM)?(tl*rmw*GSM)/10000:0;
+  const pp=nv(r.ppkg),pk=nv(r.pack);
+  return{
+    rmw,tl,wpc,
+    ppc:(wpc&&pp)?wpc*pp/1000:0,
+    wctn:(wpc&&pk)?wpc*pk/1000:0,
+    pctn:0
+  };
 }
+function calcAll(r){const c=calc(r);c.pctn=(c.ppc&&nv(r.pack))?nv(r.pack)*c.ppc:0;return c;}
 
-function fmt(val, decimals) {
-  if (!val || val === 0) return null;
-  return parseFloat(val.toFixed(decimals)).toLocaleString('en-US', { maximumFractionDigits: decimals });
-}
+const fmt=(v,d)=>{if(!v||v===0)return null;return parseFloat(v.toFixed(d)).toLocaleString('en-US',{maximumFractionDigits:d});};
+const CC=(v,d)=>{const x=fmt(v,d);return x?`<td class="td-cl">${x}</td>`:`<td class="td-cl e">—</td>`;};
+const PC=(v,d)=>{const x=fmt(v,d);return x?`<td class="td-pr">${x}</td>`:`<td class="td-pr e">—</td>`;};
 
-function cell(val, decimals) {
-  const f = fmt(val, decimals);
-  return f ? `<td class="td-calc">${f}</td>`
-           : `<td class="td-calc td-empty">—</td>`;
-}
+function set(i,k,v){R[i][k]=v;render();}
 
-function priceCell(val, decimals) {
-  const f = fmt(val, decimals);
-  return f ? `<td class="td-price">${f}</td>`
-           : `<td class="td-price td-empty">—</td>`;
-}
-
-function set(i, field, val) {
-  data[i][field] = val;
-  render();
-}
-
-function render() {
-  document.getElementById('specsBody').innerHTML = data.map((row, i) => {
-    const c = calc(row);
-    return `<tr>
-      <td class="td-type">${row.type}</td>
-      <td><input type="number" value="${row.L}" step="0.5" placeholder="—" oninput="set(${i},'L',this.value)"></td>
-      <td><input type="number" value="${row.W}" step="0.5" placeholder="—" oninput="set(${i},'W',this.value)"></td>
-      <td><input type="number" value="${row.G}" step="0.5" placeholder="—" oninput="set(${i},'G',this.value)"></td>
-      <td class="td-fixed">4</td>
-      <td><input type="number" value="${row.GSM}" step="1" placeholder="—" oninput="set(${i},'GSM',this.value)"></td>
-      ${cell(c.rmWidth, 1)}
-      ${cell(c.tubeLength, 1)}
-      ${cell(c.weightPc, 4)}
+function render(){
+  document.getElementById('t1').innerHTML=R.map((r,i)=>{
+    const c=calcAll(r);
+    return`<tr>
+      <td class="td-tp">${r.type}</td>
+      <td><input type="number" value="${iv(r.L)}"   step="0.5" placeholder="—" oninput="set(${i},'L',this.value)"></td>
+      <td><input type="number" value="${iv(r.W)}"   step="0.5" placeholder="—" oninput="set(${i},'W',this.value)"></td>
+      <td><input type="number" value="${iv(r.G)}"   step="0.5" placeholder="—" oninput="set(${i},'G',this.value)"></td>
+      <td class="td-fx">4</td>
+      <td><input type="number" value="${iv(r.GSM)}" step="1"   placeholder="—" oninput="set(${i},'GSM',this.value)"></td>
+      ${CC(c.rmw,1)}${CC(c.tl,1)}${CC(c.wpc,4)}
     </tr>`;
   }).join('');
 
-  document.getElementById('priceKiloBody').innerHTML = data.map((row, i) => `<tr>
-    <td class="td-type">${row.type}</td>
-    <td style="background:rgba(232,160,32,0.04);border-bottom:1px solid rgba(232,160,32,0.1);">
-      <input type="number" value="${row.pricePerKg}" step="0.01" placeholder="0.00" class="inp-price" oninput="set(${i},'pricePerKg',this.value)">
+  document.getElementById('t2').innerHTML=R.map((r,i)=>`<tr>
+    <td class="td-tp">${r.type}</td>
+    <td style="background:rgba(232,160,32,0.05);border-bottom:1px solid rgba(232,160,32,0.08);">
+      <input type="number" class="inp-pr" value="${iv(r.ppkg)}" step="0.01" placeholder="0.00" oninput="set(${i},'ppkg',this.value)">
     </td>
   </tr>`).join('');
 
-  document.getElementById('pricingBody').innerHTML = data.map((row, i) => {
-    const c = calc(row);
-    return `<tr>
-      <td class="td-type">${row.type}</td>
-      ${cell(c.pricePc, 6)}
-      <td><input type="number" value="${row.packing}" step="1" placeholder="—" oninput="set(${i},'packing',this.value)"></td>
-      ${cell(c.weightCtn, 4)}
-      ${priceCell(c.priceCtn, 3)}
+  document.getElementById('t3').innerHTML=R.map((r,i)=>{
+    const c=calcAll(r);
+    return`<tr>
+      <td class="td-tp">${r.type}</td>
+      ${CC(c.ppc,6)}
+      <td><input type="number" value="${iv(r.pack)}" step="1" placeholder="—" oninput="set(${i},'pack',this.value)"></td>
+      ${CC(c.wctn,4)}${PC(c.pctn,3)}
     </tr>`;
   }).join('');
 }
 
-/* ─── MODAL LOGIC ──── */
-let pendingAction = null;
-
-function showModal(type) {
-  const modal = document.getElementById('confirmModal');
-  const title = document.getElementById('modalTitle');
-  const body  = document.getElementById('modalBody');
-  const btn   = document.getElementById('modalConfirmBtn');
-  const icon  = document.getElementById('modalIcon');
-
-  if (type === 'clear') {
-    title.textContent = 'Clear All Entries';
-    body.innerHTML = 'All manually entered values will be cleared.<br>L, W, G, GSM, Price/KG and Packing fields.';
-    btn.textContent = 'Clear All';
-    btn.className = 'btn btn-clear';
-    icon.textContent = '⊘';
-    pendingAction = clearAll;
-  } else {
-    title.textContent = 'Reset to Defaults';
-    body.innerHTML = 'All fields will be reset to the original<br>default specification values.';
-    btn.textContent = 'Reset';
-    btn.className = 'btn btn-reset';
-    icon.textContent = '↺';
-    pendingAction = resetDefaults;
+// MODAL
+let pending=null;
+function showModal(t){
+  const[ic,it,ib,bc,bt]=[document.getElementById('mi'),document.getElementById('mt'),document.getElementById('mb'),document.getElementById('mc'),t];
+  if(t==='clear'){
+    ic.className='m-icon red';ic.textContent='⊘';
+    it.textContent='Clear All Entries';
+    ib.innerHTML='All manually entered values will be<br>cleared. This cannot be undone.';
+    bc.className='btn btn-red btn-sm';bc.textContent='Clear All';
+    pending=()=>{R=R.map(r=>({type:r.type,L:'',W:'',G:'',GSM:'',ppkg:'',pack:''}));render();};
+  }else{
+    ic.className='m-icon blu';ic.textContent='↺';
+    it.textContent='Reset to Defaults';
+    ib.innerHTML='Restore original specification values?<br>Price/KG and Packing will stay empty.';
+    bc.className='btn btn-dim btn-sm';bc.textContent='Reset';
+    pending=()=>{R=DEF.map(b=>({type:b.type,L:b.L,W:b.W,G:b.G,GSM:b.GSM,ppkg:'',pack:''}));render();};
   }
-
-  modal.classList.add('active');
-  btn.onclick = () => { pendingAction && pendingAction(); closeModal(); };
+  bc.onclick=()=>{pending&&pending();closeModal();};
+  document.getElementById('modal').classList.add('on');
 }
-
-function closeModal() {
-  document.getElementById('confirmModal').classList.remove('active');
-  pendingAction = null;
-}
-
-document.getElementById('confirmModal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-
-function clearAll() {
-  data = data.map(row => ({
-    type: row.type,
-    L: '', W: '', G: '', GSM: '',
-    pricePerKg: '', packing: ''
-  }));
-  render();
-}
-
-function resetDefaults() {
-  data = BAG_DEFAULTS.map(b => ({
-    type: b.type,
-    L: b.L, W: b.W, G: b.G, GSM: b.GSM,
-    pricePerKg: '', packing: ''
-  }));
-  render();
-}
+function closeModal(){document.getElementById('modal').classList.remove('on');pending=null;}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
 
 render();
 </script>
