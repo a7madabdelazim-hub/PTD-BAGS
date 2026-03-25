@@ -416,7 +416,7 @@ box-shadow: 0 0 0 3px rgba(196,125,10,0.12);
 
   <div class="content">
 
-```
+
 <!-- PANE 1 -->
 <div class="tab-pane active" id="pane0">
   <div class="legend">
@@ -467,7 +467,7 @@ box-shadow: 0 0 0 3px rgba(196,125,10,0.12);
     <tbody id="t3"></tbody>
   </table></div>
 </div>
-```
+
 
   </div><!-- /content -->
 </div><!-- /app -->
@@ -502,19 +502,19 @@ function setDiff(td,minref,ppkg){
   if(!td)return;
   if(!minref||!ppkg){td.className='td-eq';td.textContent='—';return;}
   const diff=ppkg-minref,sign=diff>0?'+':'',val=sign+parseFloat(diff.toFixed(3));
-  if(diff>0){td.className='td-up';td.innerHTML=`↑ ${val}`;}
-  else if(diff<0){td.className='td-dn';td.innerHTML=`↓ ${val}`;}
+  if(diff>0){td.className='td-up';td.innerHTML=↑ ${val};}
+  else if(diff<0){td.className='td-dn';td.innerHTML=↓ ${val};}
   else{td.className='td-eq';td.textContent='= 0';}
 }
 
 function updateCalcs(){
   R.forEach((r,i)=>{
     const c=calc(r);
-    const r1=document.querySelector(`#t1 tr:nth-child(${i+1})`);
+    const r1=document.querySelector(#t1 tr:nth-child(${i+1}));
     if(r1){const t=r1.querySelectorAll('td');setCL(t[6],c.rmw,1);setCL(t[7],c.tl,1);setCL(t[8],c.wpc,4);}
-    const r2=document.querySelector(`#t2 tr:nth-child(${i+1})`);
+    const r2=document.querySelector(#t2 tr:nth-child(${i+1}));
     if(r2){setDiff(r2.querySelectorAll('td')[3],nv(r.minref),nv(r.ppkg));}
-    const r3=document.querySelector(`#t3 tr:nth-child(${i+1})`);
+    const r3=document.querySelector(#t3 tr:nth-child(${i+1}));
     if(r3){const t=r3.querySelectorAll('td');setCL(t[1],c.ppc,6);setCL(t[3],c.wctn,4);setPR(t[4],c.pctn,3);}
   });
 }
@@ -544,8 +544,8 @@ function render(){
     const dv=diff!==null?sign+parseFloat(diff.toFixed(3)):null;
     let dc='td-eq',dh='—';
     if(diff!==null){
-      if(diff>0){dc='td-up';dh=`↑ ${dv}`;}
-      else if(diff<0){dc='td-dn';dh=`↓ ${dv}`;}
+      if(diff>0){dc='td-up';dh=↑ ${dv};}
+      else if(diff<0){dc='td-dn';dh=↓ ${dv};}
       else{dc='td-eq';dh='= 0';}
     }
     return`<tr>
