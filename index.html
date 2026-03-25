@@ -57,31 +57,39 @@ display: flex;
 flex-direction: column;
 }
 
-/* ── PORTRAIT BLOCKER ── */
-#portrait-block {
+/* ── ROTATE HINT (soft, not a blocker) ── */
+#rotate-hint {
 display: none;
 position: fixed; inset: 0; z-index: 99999;
-background: #f5f3ef;
+background: rgba(245,243,239,0.96);
 flex-direction: column;
 align-items: center; justify-content: center;
-gap: 18px; text-align: center; padding: 30px;
+gap: 14px; text-align: center; padding: 30px;
+backdrop-filter: blur(4px);
 }
-#portrait-block .rot-icon {
-font-size: 3.5rem;
-animation: spin 2s ease-in-out infinite alternate;
+#rotate-hint .rot-icon {
+font-size: 3rem;
+animation: tilt 1.5s ease-in-out infinite alternate;
 }
-@keyframes spin {
-from { transform: rotate(-20deg); }
-to   { transform: rotate(20deg); }
+@keyframes tilt {
+from { transform: rotate(-25deg); }
+to   { transform: rotate(25deg); }
 }
-#portrait-block p {
-font-family: var(–fm); font-size: 0.85rem;
+#rotate-hint p {
+font-family: var(–fm); font-size: 0.82rem;
 color: var(–text-dim); letter-spacing: 1.5px;
-text-transform: uppercase; line-height: 1.8;
+text-transform: uppercase; line-height: 1.9;
+}
+#rotate-hint .hint-btn {
+margin-top: 6px;
+font-family: var(–fm); font-size: 0.65rem; font-weight: 600;
+padding: 8px 20px; border-radius: 6px; cursor: pointer;
+letter-spacing: 1px; text-transform: uppercase;
+border: 1.5px solid var(–border2); color: var(–text-dim);
+background: transparent; -webkit-tap-highlight-color: transparent;
 }
 @media (orientation: portrait) {
-#portrait-block { display: flex; }
-#app            { display: none; }
+#rotate-hint { display: flex; }
 }
 
 /* ── APP WRAPPER ── */
@@ -347,11 +355,12 @@ box-shadow: 0 0 0 3px rgba(196,125,10,0.12);
 </head>
 <body>
 
-<!-- PORTRAIT BLOCK -->
+<!-- ROTATE HINT -->
 
-<div id="portrait-block">
+<div id="rotate-hint">
   <div class="rot-icon">📱</div>
-  <p>Please rotate your device<br>to landscape mode</p>
+  <p>Best viewed in landscape<br>Rotate your device</p>
+  <button class="hint-btn" onclick="document.getElementById('rotate-hint').style.display='none'">Continue anyway</button>
 </div>
 
 <!-- MODAL -->
@@ -578,6 +587,14 @@ function confirmClear(){
   render(); closeModal();
 }
 document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+
+// Auto-hide rotate hint when switching to landscape
+window.addEventListener('orientationchange',()=>{
+  setTimeout(()=>{
+    if(window.innerWidth>window.innerHeight)
+      document.getElementById('rotate-hint').style.display='none';
+  },300);
+});
 
 render();
 </script>
