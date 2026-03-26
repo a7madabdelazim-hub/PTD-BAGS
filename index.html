@@ -11,8 +11,6 @@
 <meta name="theme-color" content="#2563eb">
 <title>PTD Bags</title>
 
-<!-- PWA Icon via Canvas (blue #2563eb background, white PTD text) -->
-
 <script>
 (function(){
   function makeIcon(size){
@@ -77,6 +75,8 @@
   --purple:    #533ab7;
   --purple-bg: rgba(83,58,183,0.06);
   --red:       #a32d2d;
+  --teal:      #0e7490;
+  --teal-bg:   rgba(14,116,144,0.06);
   --text:      #1a1a1a;
   --muted:     #6b6055;
   --dim:       #a09080;
@@ -180,17 +180,18 @@ header {
   border-bottom: 1px solid var(--border2); padding: 6px 14px;
   padding-left: max(14px, env(safe-area-inset-left, 14px));
   padding-right: max(14px, env(safe-area-inset-right, 14px));
-  gap: 8px; align-items: center;
+  gap: 6px; align-items: center; overflow-x: auto; -webkit-overflow-scrolling: touch;
 }
 .tab {
-  flex: 1; padding: 5px 8px;
-  font-family: var(--fm); font-size: 0.65rem; font-weight: 600;
+  flex: 1; padding: 5px 8px; min-width: fit-content;
+  font-family: var(--fm); font-size: 0.62rem; font-weight: 600;
   letter-spacing: 1px; text-transform: uppercase; color: var(--dim);
   cursor: pointer; text-align: center; -webkit-tap-highlight-color: transparent;
   transition: all 0.15s ease; white-space: nowrap; border-radius: 5px;
   border: 1.5px solid var(--border2); background: transparent;
 }
 .tab.active { color: var(--accent); border-color: var(--accent); background: var(--acc-bg); }
+.tab.tab-cliche.active { color: var(--teal); border-color: var(--teal); background: var(--teal-bg); }
 
 /* CONTENT */
 .content {
@@ -240,18 +241,21 @@ thead th:last-child { border-right: none; }
 .th-pr .thl  { color: var(--accent); }
 .th-ref .thl { color: var(--purple); }
 .th-dif .thl { color: var(--muted); }
+.th-teal .thl { color: var(--teal); }
 .th-fx::after,
 .th-cl::after,
 .th-pr::after,
 .th-ref::after,
-.th-dif::after {
+.th-dif::after,
+.th-teal::after {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
 }
-.th-fx::after  { background: var(--blue);   opacity: 0.7; }
-.th-cl::after  { background: var(--green);  opacity: 0.7; }
-.th-pr::after  { background: var(--accent); opacity: 0.9; }
-.th-ref::after { background: var(--purple); opacity: 0.7; }
-.th-dif::after { background: var(--muted);  opacity: 0.3; }
+.th-fx::after   { background: var(--blue);   opacity: 0.7; }
+.th-cl::after   { background: var(--green);  opacity: 0.7; }
+.th-pr::after   { background: var(--accent); opacity: 0.9; }
+.th-ref::after  { background: var(--purple); opacity: 0.7; }
+.th-dif::after  { background: var(--muted);  opacity: 0.3; }
+.th-teal::after { background: var(--teal);   opacity: 0.7; }
 tbody td {
   padding: 10px 10px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border);
   text-align: center; vertical-align: middle; font-size: 0.9rem;
@@ -299,6 +303,52 @@ tbody tr:hover td { background: rgba(184,112,9,0.025); }
   border-bottom: 1px solid rgba(163,45,45,0.07) !important;
 }
 .td-eq { font-family: var(--fm); font-size: 0.9rem; color: var(--dim); min-width: 88px; }
+
+/* FIXED MIN REF */
+.td-ref-fixed {
+  background: rgba(83,58,183,0.06);
+  color: var(--purple);
+  font-family: var(--fm); font-size: 0.92rem; font-weight: 700;
+  border-bottom: 1px solid rgba(83,58,183,0.09) !important;
+  border-right: 1px solid rgba(83,58,183,0.14) !important;
+  white-space: nowrap;
+}
+.td-ref-fixed .ref-unit {
+  font-size: 0.62rem; font-weight: 400; color: var(--purple); opacity: 0.7;
+  margin-left: 3px; letter-spacing: 0.5px;
+}
+.td-ref-fixed .ref-lock {
+  font-size: 0.55rem; font-weight: 500; color: var(--purple); opacity: 0.5;
+  margin-left: 4px; letter-spacing: 0.5px; text-transform: uppercase;
+}
+
+/* CLICHE TEAL CELLS */
+.td-teal {
+  background: var(--teal-bg); color: var(--teal);
+  font-family: var(--fm); font-size: 0.92rem; font-weight: 700; min-width: 100px;
+  border-right: 1px solid rgba(14,116,144,0.14) !important;
+  border-bottom: 1px solid rgba(14,116,144,0.07) !important;
+}
+.td-teal.e { color: var(--dim); font-size: 0.76rem; font-weight: 400; background: transparent; }
+
+/* Cliché separator row in Final Pricing */
+.tr-cliche-sep td {
+  background: linear-gradient(90deg, rgba(14,116,144,0.08) 0%, rgba(14,116,144,0.03) 100%);
+  border-top: 1.5px solid rgba(14,116,144,0.25) !important;
+  border-bottom: 1px solid rgba(14,116,144,0.15) !important;
+  padding: 6px 10px !important;
+}
+.tr-cliche-sep .td-tp {
+  background: rgba(14,116,144,0.08) !important;
+  color: var(--teal) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 1.5px !important;
+  border-right: 1px solid rgba(14,116,144,0.2) !important;
+}
+.tr-cliche-label {
+  font-family: var(--fm); font-size: 0.65rem; font-weight: 600;
+  color: var(--teal); letter-spacing: 1px; text-transform: uppercase;
+}
 
 /* Tube length cell states */
 .td-tl-match {
@@ -362,9 +412,9 @@ input[type="number"]:focus { outline: none; border-color: var(--accent); box-sha
   border-color: var(--red) !important;
   box-shadow: 0 0 0 3px rgba(163,45,45,0.18) !important;
 }
-.inp-pr  { border-color: rgba(184,112,9,0.38); color: var(--accent); width: 96px; }
-.inp-ref { border-color: rgba(83,58,183,0.35); color: var(--purple); width: 96px; }
-.inp-ref:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(83,58,183,0.1); }
+.inp-pr   { border-color: rgba(184,112,9,0.38); color: var(--accent); width: 96px; }
+.inp-teal { border-color: rgba(14,116,144,0.38); color: var(--teal); width: 70px; }
+.inp-teal:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(14,116,144,0.1); }
 
 /* CYLINDERS TABLE */
 .cyl-table-wrap {
@@ -396,6 +446,66 @@ input[type="number"]:focus { outline: none; border-color: var(--accent); box-sha
 .cyl-m2 { color: #533ab7 !important; }
 .cyl-m3 { color: #3b6d11 !important; }
 .cyl-m4 { color: #b87009 !important; }
+
+/* ── TARGET PRICE CELL ──────────────────────────────────────── */
+.td-target {
+  background: rgba(83,58,183,0.04);
+  border-bottom: 1px solid rgba(83,58,183,0.09) !important;
+  border-right: 1px solid rgba(83,58,183,0.12) !important;
+  vertical-align: top; padding-top: 9px !important;
+}
+
+/* The derived kg note shown under Price/KG input */
+.ppkg-wrap {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 5px;
+}
+.ppkg-note {
+  display: none;
+  font-family: var(--fm); font-size: 0.58rem; font-weight: 600;
+  letter-spacing: 0.8px; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 20px;
+  white-space: nowrap; animation: noteIn 0.2s ease;
+  border: 1px solid transparent;
+}
+@keyframes noteIn {
+  from { opacity: 0; transform: translateY(-3px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.ppkg-note.visible { display: block; }
+.ppkg-note.note-ok {
+  color: var(--green); background: rgba(59,109,17,0.09);
+  border-color: rgba(59,109,17,0.22);
+}
+.ppkg-note.note-warn {
+  color: var(--red); background: rgba(163,45,45,0.08);
+  border-color: rgba(163,45,45,0.25);
+}
+.ppkg-note .note-icon { margin-right: 3px; font-size: 0.62rem; }
+.ppkg-note .note-val  { font-size: 0.72rem; font-weight: 800; }
+.ppkg-note .note-unit { font-size: 0.54rem; font-weight: 500; opacity: 0.75; margin-left: 2px; }
+
+/* Highlight Price/KG input when it exceeds the target-derived KG price */
+input.inp-pr.over-target {
+  border-color: var(--red) !important;
+  background: rgba(163,45,45,0.06) !important;
+  color: var(--red) !important;
+  box-shadow: 0 0 0 3px rgba(163,45,45,0.14) !important;
+}
+
+/* Cliche info box */
+.cliche-info {
+  background: linear-gradient(135deg, rgba(14,116,144,0.06) 0%, rgba(14,116,144,0.02) 100%);
+  border: 1px solid rgba(14,116,144,0.2);
+  border-radius: 7px; padding: 9px 14px; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--fm); font-size: 0.6rem; color: var(--teal);
+  letter-spacing: 1px;
+}
+.cliche-formula {
+  background: rgba(14,116,144,0.08); border-radius: 5px;
+  padding: 3px 8px; font-weight: 700; font-size: 0.62rem;
+  color: var(--teal); white-space: nowrap;
+}
 </style>
 
 </head>
@@ -452,16 +562,17 @@ input[type="number"]:focus { outline: none; border-color: var(--accent); box-sha
   </header>
 
   <div class="tabs">
-    <div class="tab active" onclick="switchTab(0)">Specifications</div>
-    <div class="tab"        onclick="switchTab(1)">Price / KG</div>
-    <div class="tab"        onclick="switchTab(2)">Final Pricing</div>
-    <div class="tab"        onclick="switchTab(3)">Cylinders</div>
+    <div class="tab active"      onclick="switchTab(0)">Specifications</div>
+    <div class="tab"             onclick="switchTab(1)">Price / KG</div>
+    <div class="tab"             onclick="switchTab(2)">Final Pricing</div>
+    <div class="tab tab-cliche"  onclick="switchTab(3)">Cliché</div>
+    <div class="tab"             onclick="switchTab(4)">Cylinders</div>
   </div>
 
   <div class="content">
 
 ```
-<!-- PANE 1: Specifications -->
+<!-- PANE 0: Specifications -->
 <div class="tab-pane active" id="pane0">
   <div class="legend">
     <div class="leg-item"><div class="leg-dot" style="background:var(--dim)"></div>Manual</div>
@@ -485,20 +596,21 @@ input[type="number"]:focus { outline: none; border-color: var(--accent); box-sha
   </table></div>
 </div>
 
-<!-- PANE 2: Price / KG -->
+<!-- PANE 1: Price / KG -->
 <div class="tab-pane" id="pane1">
   <div class="tw"><table>
     <thead><tr>
       <th class="th-tp"><span class="thl">Type</span></th>
-      <th class="th-ref"><span class="thl">Min Ref / KG</span><span class="ths">your minimum price</span></th>
+      <th class="th-ref"><span class="thl">Min Ref / KG</span><span class="ths">fixed reference price</span></th>
       <th class="th-pr"><span class="thl">Price / KG</span><span class="ths">enter manually</span></th>
       <th class="th-dif"><span class="thl">vs Min Ref</span><span class="ths">difference</span></th>
+      <th class="th-ref"><span class="thl">Target Price / Pc</span><span class="ths">customer current price · SR</span></th>
     </tr></thead>
     <tbody id="t2"></tbody>
   </table></div>
 </div>
 
-<!-- PANE 3: Final Pricing -->
+<!-- PANE 2: Final Pricing -->
 <div class="tab-pane" id="pane2">
   <div class="tw"><table>
     <thead><tr>
@@ -512,8 +624,27 @@ input[type="number"]:focus { outline: none; border-color: var(--accent); box-sha
   </table></div>
 </div>
 
-<!-- PANE 4: Cylinders -->
+<!-- PANE 3: Cliché -->
 <div class="tab-pane" id="pane3">
+  <div class="cliche-info">
+    <span>Formula:</span>
+    <span class="cliche-formula">RMW × Tube Length × No. of Colors × 0.18</span>
+    <span style="color:var(--muted);">— auto from Specifications</span>
+  </div>
+  <div class="tw"><table>
+    <thead><tr>
+      <th class="th-tp"><span class="thl">Type</span></th>
+      <th class="th-cl"><span class="thl">R/M Width</span><span class="ths">auto from specs</span></th>
+      <th class="th-cl"><span class="thl">Tube Length</span><span class="ths">auto from specs</span></th>
+      <th class="th-teal"><span class="thl">No. of Colors</span><span class="ths">enter manually</span></th>
+      <th class="th-teal"><span class="thl">Cliché Price</span><span class="ths">SR · calculated</span></th>
+    </tr></thead>
+    <tbody id="t4"></tbody>
+  </table></div>
+</div>
+
+<!-- PANE 4: Cylinders -->
+<div class="tab-pane" id="pane4">
   <div class="legend">
     <div class="leg-item"><div class="leg-dot" style="background:#185fa5"></div>Machine 1</div>
     <div class="leg-item"><div class="leg-dot" style="background:#533ab7"></div>Machine 2</div>
@@ -565,20 +696,32 @@ function nearestCylinders(tl) {
   return { below, above };
 }
 
+// ── FIXED MIN REF PRICES ───────────────────────────────────────────────────────
+const MIN_REF = {
+  'LARGE SAT': 7,
+  'SOS':       8.5,
+  'TH':        12
+};
+
 // ── BAG TYPES ──────────────────────────────────────────────────────────────────
 const TYPES = [
-  {type:'LARGE SAT', L:'', W:'', G:'', GSM:'', minref:'', ppkg:'', pack:''},
-  {type:'SOS',       L:'', W:'', G:'', GSM:'', minref:'', ppkg:'', pack:''},
-  {type:'TH',        L:'', W:'', G:'', GSM:'', minref:'', ppkg:'', pack:''},
+  {type:'LARGE SAT', L:'', W:'', G:'', GSM:'', ppkg:'', pack:''},
+  {type:'SOS',       L:'', W:'', G:'', GSM:'', ppkg:'', pack:''},
+  {type:'TH',        L:'', W:'', G:'', GSM:'', ppkg:'', pack:''},
 ];
 let R = TYPES.map(function(r){ return Object.assign({},r); });
+
+// Cliché colors (separate state, cleared with Clear All)
+let CLICHE_COLORS = {'LARGE SAT':'', 'SOS':'', 'TH':''};
+
+// Target price per piece (customer current price), cleared with Clear All
+let TARGET_PRICE = {'LARGE SAT':'', 'SOS':'', 'TH':''};
 
 const nv  = function(v){ var x=parseFloat(v); return isNaN(x)?0:x; };
 const ok  = function(v){ return v!==''&&v!==null&&v!==undefined; };
 const iv  = function(v){ return ok(v)?v:''; };
 
 // ── L VALIDATION ───────────────────────────────────────────────────────────────
-// Warn when L ≤ G + G/2 + 4  — SOS and TH only (LARGE SAT does not use G in tube length)
 function isLInvalid(r) {
   if (r.type === 'LARGE SAT') return false;
   if (!ok(r.L) || !ok(r.G)) return false;
@@ -586,7 +729,6 @@ function isLInvalid(r) {
   return L <= G + G/2 + 4;
 }
 function minLRequired(r) {
-  // The minimum valid L is strictly greater than G + G/2 + 4
   if (r.type === 'LARGE SAT') return null;
   if (!ok(r.G)) return null;
   const G = nv(r.G);
@@ -618,7 +760,12 @@ function calc(r) {
   const ppc  = (wpc&&pp) ? wpc*pp/1000 : 0;
   const wctn = (wpc&&pk) ? wpc*pk/1000 : 0;
   const pctn = (ppc&&pk) ? pk*ppc : 0;
-  return {rmw, tl, wpc, ppc, wctn, pctn};
+
+  // Cliché
+  const colors = nv(CLICHE_COLORS[r.type]);
+  const cliche = (rmw&&tl&&colors) ? rmw*tl*colors*0.18 : 0;
+
+  return {rmw, tl, wpc, ppc, wctn, pctn, cliche};
 }
 
 const fmt = function(v,d){
@@ -649,12 +796,14 @@ function tubeLengthCell(tl, hasInputs) {
   return '<td class="td-tl-suggest"><span class="tl-val">'+tl+'</span><span class="tl-hint">'+hints+'</span></td>';
 }
 
-// ── UPDATE CALCS (no re-render, just update computed cells) ────────────────────
+// ── UPDATE CALCS ───────────────────────────────────────────────────────────────
 function setCL(td,v,d){ if(!td)return; const x=fmt(v,d); td.className=x?'td-cl':'td-cl e'; td.textContent=x||'—'; }
 function setPR(td,v,d){ if(!td)return; const x=fmt(v,d); td.className=x?'td-pr':'td-pr e'; td.textContent=x||'—'; }
+function setTeal(td,v,d){ if(!td)return; const x=fmt(v,d); td.className=x?'td-teal':'td-teal e'; td.textContent=x?(x+' SR'):'—'; }
+
 function setDiff(td,minref,ppkg){
   if(!td)return;
-  if(!minref||!ppkg){ td.className='td-eq'; td.textContent='—'; return; }
+  if(!ppkg){ td.className='td-eq'; td.textContent='—'; return; }
   const diff=ppkg-minref, sign=diff>0?'+':'', val=sign+parseFloat(diff.toFixed(3));
   if(diff>0)      { td.className='td-up'; td.innerHTML='↑ '+val; }
   else if(diff<0) { td.className='td-dn'; td.innerHTML='↓ '+val; }
@@ -666,12 +815,10 @@ function updateCalcs() {
     const c = calc(r);
     const hasInputs = ok(r.L)&&ok(r.W)&&ok(r.G)&&ok(r.GSM);
 
-    // Tab 1
+    // Tab 0 - Specs
     const r1 = document.querySelector('#t1 tr:nth-child('+(i+1)+')');
     if (r1) {
       const t = r1.querySelectorAll('td');
-
-      // Update L cell wrapper validation state
       const lWrap = r1.querySelector('.l-wrap');
       if (lWrap) {
         const invalid = isLInvalid(r);
@@ -684,7 +831,6 @@ function updateCalcs() {
           }
         }
       }
-
       setCL(t[6], c.rmw, 1);
       const tlTd = t[7];
       if (tlTd) {
@@ -696,26 +842,82 @@ function updateCalcs() {
       setCL(t[8], c.wpc, 4);
     }
 
-    // Tab 2
+    // Tab 1 - Price/KG: diff + target note + highlight
     const r2 = document.querySelector('#t2 tr:nth-child('+(i+1)+')');
-    if (r2) { setDiff(r2.querySelectorAll('td')[3], nv(r.minref), nv(r.ppkg)); }
+    if (r2) {
+      setDiff(r2.querySelectorAll('td')[3], MIN_REF[r.type], nv(r.ppkg));
 
-    // Tab 3
-    const r3 = document.querySelector('#t3 tr:nth-child('+(i+1)+')');
+      // Target price derived KG note
+      const tkg = calcTargetKG(r);
+      const note = r2.querySelector('.ppkg-note');
+      const ppkgInp = r2.querySelector('.inp-pr');
+
+      if (note) {
+        if (tkg !== null) {
+          const minref = MIN_REF[r.type];
+          const isOk = tkg >= minref;
+          note.classList.add('visible');
+          note.classList.toggle('note-ok', isOk);
+          note.classList.toggle('note-warn', !isOk);
+          note.innerHTML =
+            '<span class="note-icon">'+(isOk?'✓':'⚠')+'</span>' +
+            'From target: <span class="note-val">'+parseFloat(tkg.toFixed(3))+'</span>' +
+            '<span class="note-unit">SR/KG</span>';
+        } else {
+          note.classList.remove('visible','note-ok','note-warn');
+          note.innerHTML = '';
+        }
+      }
+
+      // Highlight Price/KG input if it exceeds target-derived KG price
+      if (ppkgInp) {
+        const pp = nv(r.ppkg);
+        const overTarget = tkg !== null && pp > 0 && pp > tkg;
+        ppkgInp.classList.toggle('over-target', overTarget);
+      }
+    }
+
+    // Tab 2 - Final Pricing
+    const r3 = document.querySelector('#t3 tr[data-idx="'+i+'"]');
     if (r3) {
       const t = r3.querySelectorAll('td');
       setCL(t[1], c.ppc, 6);
       setCL(t[3], c.wctn, 4);
       setPR(t[4], c.pctn, 3);
     }
+
+    // Tab 3 - Cliché
+    const r4 = document.querySelector('#t4 tr:nth-child('+(i+1)+')');
+    if (r4) {
+      const t = r4.querySelectorAll('td');
+      setCL(t[1], c.rmw, 1);
+      // Tube length cell (index 2)
+      const tlTd = t[2];
+      if (tlTd) {
+        const newClass = c.tl ? 'td-cl' : 'td-cl e';
+        tlTd.className = newClass;
+        tlTd.textContent = c.tl ? c.tl : '—';
+      }
+      setTeal(t[4], c.cliche, 3);
+    }
   });
 }
 
 function set(i,k,v){ R[i][k]=v; updateCalcs(); }
+function setCliche(type,v){ CLICHE_COLORS[type]=v; updateCalcs(); }
+function setTarget(type,v){ TARGET_PRICE[type]=v; updateCalcs(); }
+
+// Derived Price/KG from target price per piece
+function calcTargetKG(r) {
+  const c = calc(r);
+  const tp = nv(TARGET_PRICE[r.type]);
+  if (!tp || !c.wpc) return null;
+  return tp / c.wpc * 1000;
+}
 
 // ── RENDER ─────────────────────────────────────────────────────────────────────
 function render() {
-  // Tab 1
+  // Tab 0 - Specs
   document.getElementById('t1').innerHTML = R.map(function(r,i){
     const c = calc(r);
     const hasInputs = ok(r.L)&&ok(r.W)&&ok(r.G)&&ok(r.GSM);
@@ -742,9 +944,11 @@ function render() {
     '</tr>';
   }).join('');
 
-  // Tab 2
+  // Tab 1 - Price/KG
   document.getElementById('t2').innerHTML = R.map(function(r,i){
-    const diff = (nv(r.minref)&&nv(r.ppkg)) ? nv(r.ppkg)-nv(r.minref) : null;
+    const minref = MIN_REF[r.type];
+    const pp = nv(r.ppkg);
+    const diff = pp ? pp - minref : null;
     const sign = diff!==null&&diff>0?'+':'';
     const dv   = diff!==null ? sign+parseFloat(diff.toFixed(3)) : null;
     let dc='td-eq', dh='—';
@@ -753,22 +957,49 @@ function render() {
       else if (diff<0) { dc='td-dn'; dh='↓ '+dv; }
       else             { dc='td-eq'; dh='= 0'; }
     }
+
+    // Target KG note (pre-render initial state)
+    const tkg = calcTargetKG(r);
+    let noteHtml = '';
+    if (tkg !== null) {
+      const isOk = tkg >= minref;
+      const cls = isOk ? 'note-ok' : 'note-warn';
+      const icon = isOk ? '✓' : '⚠';
+      noteHtml = '<div class="ppkg-note visible '+cls+'">' +
+        '<span class="note-icon">'+icon+'</span>' +
+        'From target: <span class="note-val">'+parseFloat(tkg.toFixed(3))+'</span>' +
+        '<span class="note-unit">SR/KG</span>' +
+      '</div>';
+    } else {
+      noteHtml = '<div class="ppkg-note"></div>';
+    }
+
+    const overTarget = tkg !== null && pp > 0 && pp > tkg;
+
     return '<tr>' +
       '<td class="td-tp">'+r.type+'</td>' +
-      '<td style="background:rgba(83,58,183,0.04);border-bottom:1px solid rgba(83,58,183,0.09);border-right:1px solid rgba(83,58,183,0.11);">' +
-        '<input type="number" inputmode="decimal" class="inp-ref" value="'+iv(r.minref)+'" step="0.01" placeholder="0.00" oninput="set('+i+',\'minref\',this.value)">' +
+      '<td class="td-ref-fixed">' +
+        minref.toLocaleString('en-US',{minimumFractionDigits: minref%1===0?0:1, maximumFractionDigits:2}) +
+        '<span class="ref-unit">SR</span>' +
+        '<span class="ref-lock">🔒</span>' +
       '</td>' +
-      '<td style="background:rgba(184,112,9,0.05);border-bottom:1px solid rgba(184,112,9,0.09);">' +
-        '<input type="number" inputmode="decimal" class="inp-pr" value="'+iv(r.ppkg)+'" step="0.01" placeholder="0.00" oninput="set('+i+',\'ppkg\',this.value)">' +
+      '<td style="background:rgba(184,112,9,0.05);border-bottom:1px solid rgba(184,112,9,0.09);vertical-align:top;padding-top:9px;">' +
+        '<div class="ppkg-wrap">' +
+          '<input type="number" inputmode="decimal" class="inp-pr'+(overTarget?' over-target':'')+'" value="'+iv(r.ppkg)+'" step="0.01" placeholder="0.00" oninput="set('+i+',\'ppkg\',this.value)">' +
+          noteHtml +
+        '</div>' +
       '</td>' +
       '<td class="'+dc+'" style="text-align:center;">'+dh+'</td>' +
+      '<td class="td-target">' +
+        '<input type="number" inputmode="decimal" class="inp-ref" value="'+iv(TARGET_PRICE[r.type])+'" step="0.001" placeholder="0.000" oninput="setTarget(\''+r.type+'\',this.value)">' +
+      '</td>' +
     '</tr>';
   }).join('');
 
-  // Tab 3
+  // Tab 2 - Final Pricing (no Cliché column)
   document.getElementById('t3').innerHTML = R.map(function(r,i){
     const c = calc(r);
-    return '<tr>' +
+    return '<tr data-idx="'+i+'">' +
       '<td class="td-tp">'+r.type+'</td>' +
       '<td class="'+(c.ppc?'td-cl':'td-cl e')+'">'+(fmt(c.ppc,6)||'—')+'</td>' +
       '<td><input type="number" inputmode="decimal" value="'+iv(r.pack)+'" step="1" placeholder="—" oninput="set('+i+',\'pack\',this.value)"></td>' +
@@ -777,7 +1008,22 @@ function render() {
     '</tr>';
   }).join('');
 
-  // Cylinders tab
+  // Tab 3 - Cliché
+  document.getElementById('t4').innerHTML = R.map(function(r,i){
+    const c = calc(r);
+    const colors = CLICHE_COLORS[r.type];
+    return '<tr>' +
+      '<td class="td-tp">'+r.type+'</td>' +
+      '<td class="'+(c.rmw?'td-cl':'td-cl e')+'">'+(fmt(c.rmw,1)||'—')+'</td>' +
+      '<td class="'+(c.tl?'td-cl':'td-cl e')+'">'+(c.tl||'—')+'</td>' +
+      '<td style="background:rgba(14,116,144,0.04);border-bottom:1px solid rgba(14,116,144,0.09);border-right:1px solid rgba(14,116,144,0.12);">' +
+        '<input type="number" inputmode="decimal" class="inp-teal" value="'+iv(colors)+'" step="1" min="1" placeholder="—" oninput="setCliche(\''+r.type+'\',this.value)">' +
+      '</td>' +
+      '<td class="'+(c.cliche?'td-teal':'td-teal e')+'">'+(c.cliche?(fmt(c.cliche,3)+' SR'):'—')+'</td>' +
+    '</tr>';
+  }).join('');
+
+  // Cylinders
   const maxRows = Math.max(CYLINDERS.m1.length, CYLINDERS.m2.length, CYLINDERS.m3.length, CYLINDERS.m4.length);
   let cylHtml = '';
   for (let row=0; row<maxRows; row++) {
@@ -803,6 +1049,8 @@ function switchTab(n) {
 function closeModal()   { document.getElementById('modal').classList.remove('on'); }
 function confirmClear() {
   R = TYPES.map(function(r){ return Object.assign({},r); });
+  CLICHE_COLORS = {'LARGE SAT':'', 'SOS':'', 'TH':''};
+  TARGET_PRICE  = {'LARGE SAT':'', 'SOS':'', 'TH':''};
   render(); closeModal();
 }
 document.getElementById('modal').addEventListener('click', function(e){ if(e.target.id==='modal') closeModal(); });
