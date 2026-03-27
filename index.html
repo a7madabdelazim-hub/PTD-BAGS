@@ -77,6 +77,8 @@
   --red:       #a32d2d;
   --teal:      #0e7490;
   --teal-bg:   rgba(14,116,144,0.06);
+  --orange:    #c2500a;
+  --orange-bg: rgba(194,80,10,0.07);
   --text:      #1a1a1a;
   --muted:     #6b6055;
   --dim:       #a09080;
@@ -242,20 +244,24 @@ thead th:last-child { border-right: none; }
 .th-ref .thl { color: var(--purple); }
 .th-dif .thl { color: var(--muted); }
 .th-teal .thl { color: var(--teal); }
+.th-orange .thl { color: var(--orange); }
 .th-fx::after,
 .th-cl::after,
 .th-pr::after,
 .th-ref::after,
 .th-dif::after,
-.th-teal::after {
+.th-teal::after,
+.th-orange::after {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
 }
-.th-fx::after   { background: var(--blue);   opacity: 0.7; }
-.th-cl::after   { background: var(--green);  opacity: 0.7; }
-.th-pr::after   { background: var(--accent); opacity: 0.9; }
-.th-ref::after  { background: var(--purple); opacity: 0.7; }
-.th-dif::after  { background: var(--muted);  opacity: 0.3; }
-.th-teal::after { background: var(--teal);   opacity: 0.7; }
+.th-fx::after     { background: var(--blue);   opacity: 0.7; }
+.th-cl::after     { background: var(--green);  opacity: 0.7; }
+.th-pr::after     { background: var(--accent); opacity: 0.9; }
+.th-ref::after    { background: var(--purple); opacity: 0.7; }
+.th-dif::after    { background: var(--muted);  opacity: 0.3; }
+.th-teal::after   { background: var(--teal);   opacity: 0.7; }
+.th-orange::after { background: var(--orange); opacity: 0.7; }
+
 tbody td {
   padding: 10px 10px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border);
   text-align: center; vertical-align: middle; font-size: 0.9rem;
@@ -304,6 +310,21 @@ tbody tr:hover td { background: rgba(184,112,9,0.025); }
 }
 .td-eq { font-family: var(--fm); font-size: 0.9rem; color: var(--dim); min-width: 88px; }
 
+/* Pcs / KG cell */
+.td-pcskg {
+  background: var(--orange-bg);
+  color: var(--orange);
+  font-family: var(--fm); font-size: 0.92rem; font-weight: 800;
+  min-width: 90px;
+  border-right: 1px solid rgba(194,80,10,0.16) !important;
+  border-bottom: 1px solid rgba(194,80,10,0.09) !important;
+}
+.td-pcskg.e { color: var(--dim); font-size: 0.76rem; font-weight: 400; background: transparent; }
+.td-pcskg .pcskg-unit {
+  font-size: 0.54rem; font-weight: 500; opacity: 0.65;
+  margin-left: 2px; letter-spacing: 0.5px;
+}
+
 /* FIXED MIN REF */
 .td-ref-fixed {
   background: rgba(83,58,183,0.06);
@@ -330,25 +351,6 @@ tbody tr:hover td { background: rgba(184,112,9,0.025); }
   border-bottom: 1px solid rgba(14,116,144,0.07) !important;
 }
 .td-teal.e { color: var(--dim); font-size: 0.76rem; font-weight: 400; background: transparent; }
-
-/* Cliché separator row in Final Pricing */
-.tr-cliche-sep td {
-  background: linear-gradient(90deg, rgba(14,116,144,0.08) 0%, rgba(14,116,144,0.03) 100%);
-  border-top: 1.5px solid rgba(14,116,144,0.25) !important;
-  border-bottom: 1px solid rgba(14,116,144,0.15) !important;
-  padding: 6px 10px !important;
-}
-.tr-cliche-sep .td-tp {
-  background: rgba(14,116,144,0.08) !important;
-  color: var(--teal) !important;
-  font-size: 0.72rem !important;
-  letter-spacing: 1.5px !important;
-  border-right: 1px solid rgba(14,116,144,0.2) !important;
-}
-.tr-cliche-label {
-  font-family: var(--fm); font-size: 0.65rem; font-weight: 600;
-  color: var(--teal); letter-spacing: 1px; text-transform: uppercase;
-}
 
 /* Tube length cell states */
 .td-tl-match {
@@ -579,6 +581,7 @@ input.inp-pr.over-target {
     <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>Fixed</div>
     <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Calculated</div>
     <div class="leg-item"><div class="leg-dot" style="background:var(--accent)"></div>Pricing</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--orange)"></div>Pcs/KG</div>
   </div>
   <div class="tw"><table>
     <thead><tr>
@@ -591,6 +594,7 @@ input.inp-pr.over-target {
       <th class="th-cl"><span class="thl">R/M Width</span><span class="ths">W+W+G+G+4</span></th>
       <th class="th-cl"><span class="thl">Tube Length</span><span class="ths">see formula per type</span></th>
       <th class="th-cl"><span class="thl">Weight/Pc (g)</span><span class="ths">see formula per type</span></th>
+      <th class="th-orange"><span class="thl">Pcs / KG</span><span class="ths">1000 ÷ Wt/Pc</span></th>
     </tr></thead>
     <tbody id="t1"></tbody>
   </table></div>
@@ -711,11 +715,8 @@ const TYPES = [
 ];
 let R = TYPES.map(function(r){ return Object.assign({},r); });
 
-// Cliché colors (separate state, cleared with Clear All)
 let CLICHE_COLORS = {'LARGE SAT':'', 'SOS':'', 'TH':''};
-
-// Target price per piece (customer current price), cleared with Clear All
-let TARGET_PRICE = {'LARGE SAT':'', 'SOS':'', 'TH':''};
+let TARGET_PRICE  = {'LARGE SAT':'', 'SOS':'', 'TH':''};
 
 const nv  = function(v){ var x=parseFloat(v); return isNaN(x)?0:x; };
 const ok  = function(v){ return v!==''&&v!==null&&v!==undefined; };
@@ -756,16 +757,18 @@ function calc(r) {
     wpc = (rmw&&tl&&GSM) ? (tl*rmw*GSM)/10000 : 0;
   }
 
+  // Pcs per KG = 1000 / weight-per-piece (in grams)
+  const pcskg = wpc ? 1000 / wpc : 0;
+
   const pp=nv(r.ppkg), pk=nv(r.pack);
   const ppc  = (wpc&&pp) ? wpc*pp/1000 : 0;
   const wctn = (wpc&&pk) ? wpc*pk/1000 : 0;
   const pctn = (ppc&&pk) ? pk*ppc : 0;
 
-  // Cliché
   const colors = nv(CLICHE_COLORS[r.type]);
   const cliche = (rmw&&tl&&colors) ? rmw*tl*colors*0.18 : 0;
 
-  return {rmw, tl, wpc, ppc, wctn, pctn, cliche};
+  return {rmw, tl, wpc, pcskg, ppc, wctn, pctn, cliche};
 }
 
 const fmt = function(v,d){
@@ -801,6 +804,14 @@ function setCL(td,v,d){ if(!td)return; const x=fmt(v,d); td.className=x?'td-cl':
 function setPR(td,v,d){ if(!td)return; const x=fmt(v,d); td.className=x?'td-pr':'td-pr e'; td.textContent=x||'—'; }
 function setTeal(td,v,d){ if(!td)return; const x=fmt(v,d); td.className=x?'td-teal':'td-teal e'; td.textContent=x?(x+' SR'):'—'; }
 
+function setPcsKG(td, v) {
+  if (!td) return;
+  if (!v || v === 0) { td.className='td-pcskg e'; td.innerHTML='—'; return; }
+  td.className = 'td-pcskg';
+  td.innerHTML = parseFloat(v.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2}) +
+    '<span class="pcskg-unit">pcs</span>';
+}
+
 function setDiff(td,minref,ppkg){
   if(!td)return;
   if(!ppkg){ td.className='td-eq'; td.textContent='—'; return; }
@@ -832,6 +843,7 @@ function updateCalcs() {
         }
       }
       setCL(t[6], c.rmw, 1);
+      // Tube length cell (index 7)
       const tlTd = t[7];
       if (tlTd) {
         const tmp = document.createElement('tbody');
@@ -840,18 +852,17 @@ function updateCalcs() {
         tlTd.parentNode.replaceChild(newTd, tlTd);
       }
       setCL(t[8], c.wpc, 4);
+      // Pcs/KG cell (index 9)
+      setPcsKG(t[9], c.pcskg);
     }
 
-    // Tab 1 - Price/KG: diff + target note + highlight
+    // Tab 1 - Price/KG
     const r2 = document.querySelector('#t2 tr:nth-child('+(i+1)+')');
     if (r2) {
       setDiff(r2.querySelectorAll('td')[3], MIN_REF[r.type], nv(r.ppkg));
-
-      // Target price derived KG note
       const tkg = calcTargetKG(r);
       const note = r2.querySelector('.ppkg-note');
       const ppkgInp = r2.querySelector('.inp-pr');
-
       if (note) {
         if (tkg !== null) {
           const minref = MIN_REF[r.type];
@@ -868,8 +879,6 @@ function updateCalcs() {
           note.innerHTML = '';
         }
       }
-
-      // Highlight Price/KG input if it exceeds target-derived KG price
       if (ppkgInp) {
         const pp = nv(r.ppkg);
         const overTarget = tkg !== null && pp > 0 && pp > tkg;
@@ -891,11 +900,9 @@ function updateCalcs() {
     if (r4) {
       const t = r4.querySelectorAll('td');
       setCL(t[1], c.rmw, 1);
-      // Tube length cell (index 2)
       const tlTd = t[2];
       if (tlTd) {
-        const newClass = c.tl ? 'td-cl' : 'td-cl e';
-        tlTd.className = newClass;
+        tlTd.className = c.tl ? 'td-cl' : 'td-cl e';
         tlTd.textContent = c.tl ? c.tl : '—';
       }
       setTeal(t[4], c.cliche, 3);
@@ -907,7 +914,6 @@ function set(i,k,v){ R[i][k]=v; updateCalcs(); }
 function setCliche(type,v){ CLICHE_COLORS[type]=v; updateCalcs(); }
 function setTarget(type,v){ TARGET_PRICE[type]=v; updateCalcs(); }
 
-// Derived Price/KG from target price per piece
 function calcTargetKG(r) {
   const c = calc(r);
   const tp = nv(TARGET_PRICE[r.type]);
@@ -926,6 +932,11 @@ function render() {
     const lWrapClass = 'l-wrap' + (lInvalid ? ' invalid' : '');
     const badgeText = lInvalid && minL!==null ? 'L must be > '+minL.toFixed(1) : '';
 
+    // Pcs/KG cell HTML
+    const pcskgHtml = c.pcskg
+      ? '<td class="td-pcskg">'+parseFloat(c.pcskg.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2})+'<span class="pcskg-unit">pcs</span></td>'
+      : '<td class="td-pcskg e">—</td>';
+
     return '<tr>' +
       '<td class="td-tp">'+r.type+'</td>' +
       '<td style="vertical-align:top;padding-top:8px;">' +
@@ -941,6 +952,7 @@ function render() {
       '<td class="'+(c.rmw?'td-cl':'td-cl e')+'">'+(fmt(c.rmw,1)||'—')+'</td>' +
       tubeLengthCell(c.tl, hasInputs) +
       '<td class="'+(c.wpc?'td-cl':'td-cl e')+'">'+(fmt(c.wpc,4)||'—')+'</td>' +
+      pcskgHtml +
     '</tr>';
   }).join('');
 
@@ -957,8 +969,6 @@ function render() {
       else if (diff<0) { dc='td-dn'; dh='↓ '+dv; }
       else             { dc='td-eq'; dh='= 0'; }
     }
-
-    // Target KG note (pre-render initial state)
     const tkg = calcTargetKG(r);
     let noteHtml = '';
     if (tkg !== null) {
@@ -973,7 +983,6 @@ function render() {
     } else {
       noteHtml = '<div class="ppkg-note"></div>';
     }
-
     const overTarget = tkg !== null && pp > 0 && pp > tkg;
 
     return '<tr>' +
@@ -996,7 +1005,7 @@ function render() {
     '</tr>';
   }).join('');
 
-  // Tab 2 - Final Pricing (no Cliché column)
+  // Tab 2 - Final Pricing
   document.getElementById('t3').innerHTML = R.map(function(r,i){
     const c = calc(r);
     return '<tr data-idx="'+i+'">' +
