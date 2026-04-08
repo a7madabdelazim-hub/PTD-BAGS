@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -10,533 +9,169 @@
 <meta name="apple-mobile-web-app-title" content="PTD Bags">
 <meta name="theme-color" content="#2563eb">
 <title>PTD Bags</title>
-
-<script>
-(function(){
-  function makeIcon(size){
-    const c=document.createElement('canvas');
-    c.width=c.height=size;
-    const ctx=c.getContext('2d');
-    const r=size*0.18;
-    ctx.beginPath();
-    ctx.moveTo(r,0);ctx.lineTo(size-r,0);ctx.quadraticCurveTo(size,0,size,r);
-    ctx.lineTo(size,size-r);ctx.quadraticCurveTo(size,size,size-r,size);
-    ctx.lineTo(r,size);ctx.quadraticCurveTo(0,size,0,size-r);
-    ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);
-    ctx.closePath();
-    const g=ctx.createLinearGradient(0,0,size,size);
-    g.addColorStop(0,'#2563eb');g.addColorStop(1,'#1d4ed8');
-    ctx.fillStyle=g;ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,0.12)';
-    ctx.beginPath();ctx.ellipse(size*0.35,size*0.28,size*0.45,size*0.38,Math.PI/4,0,Math.PI*2);
-    ctx.fill();
-    ctx.fillStyle='#ffffff';
-    ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.font='bold '+Math.round(size*0.28)+'px "Helvetica Neue",Arial,sans-serif';
-    ctx.letterSpacing='2px';
-    ctx.fillText('PTD',size/2,size*0.48);
-    ctx.font=Math.round(size*0.11)+'px "Helvetica Neue",Arial,sans-serif';
-    ctx.fillStyle='rgba(255,255,255,0.75)';
-    ctx.fillText('BAGS',size/2,size*0.68);
-    return c.toDataURL('image/png');
-  }
-  window.addEventListener('DOMContentLoaded',function(){
-    const sizes=[57,60,72,76,114,120,144,152,180,192,512];
-    sizes.forEach(function(sz){
-      const lnk=document.createElement('link');
-      lnk.rel='apple-touch-icon';
-      lnk.setAttribute('sizes',sz+'x'+sz);
-      lnk.href=makeIcon(sz);
-      document.head.appendChild(lnk);
-    });
-    const fav=document.createElement('link');
-    fav.rel='icon';fav.type='image/png';fav.href=makeIcon(32);
-    document.head.appendChild(fav);
-  });
-})();
-</script>
-
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg:        #f5f3ef;
-  --bg1:       #ffffff;
-  --bg2:       #f0ede8;
-  --bg3:       #e8e4de;
-  --border:    #d8d2c8;
-  --border2:   #c8c0b4;
-  --accent:    #b87009;
-  --accent2:   #e09820;
-  --acc-bg:    rgba(184,112,9,0.07);
-  --blue:      #185fa5;
-  --blue-bg:   rgba(24,95,165,0.06);
-  --green:     #3b6d11;
-  --green-bg:  rgba(59,109,17,0.06);
-  --purple:    #533ab7;
-  --purple-bg: rgba(83,58,183,0.06);
-  --red:       #a32d2d;
-  --teal:      #0e7490;
-  --teal-bg:   rgba(14,116,144,0.06);
-  --orange:    #c2500a;
-  --orange-bg: rgba(194,80,10,0.07);
-  --text:      #1a1a1a;
-  --muted:     #6b6055;
-  --dim:       #a09080;
-  --f:  -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-  --fm: 'Menlo','Monaco','SF Mono','Courier New',monospace;
+  --bg:#f5f3ef;--bg1:#ffffff;--bg2:#f0ede8;--bg3:#e8e4de;
+  --border:#d8d2c8;--border2:#c8c0b4;
+  --accent:#b87009;--accent2:#e09820;--acc-bg:rgba(184,112,9,0.07);
+  --blue:#185fa5;--blue-bg:rgba(24,95,165,0.06);
+  --green:#3b6d11;--green-bg:rgba(59,109,17,0.06);
+  --purple:#533ab7;--purple-bg:rgba(83,58,183,0.06);
+  --red:#a32d2d;--teal:#0e7490;--teal-bg:rgba(14,116,144,0.06);
+  --orange:#c2500a;--orange-bg:rgba(194,80,10,0.07);
+  --text:#1a1a1a;--muted:#6b6055;--dim:#a09080;
+  --f:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+  --fm:'Menlo','Monaco','SF Mono','Courier New',monospace;
 }
-html { -webkit-text-size-adjust: 100%; height: -webkit-fill-available; }
-body {
-  background: var(--bg); color: var(--text); font-family: var(--f);
-  height: 100vh; height: -webkit-fill-available;
-  overflow: hidden; -webkit-font-smoothing: antialiased;
-  display: flex; flex-direction: column;
-}
+html{-webkit-text-size-adjust:100%;height:-webkit-fill-available;}
+body{background:var(--bg);color:var(--text);font-family:var(--f);height:100vh;height:-webkit-fill-available;overflow:hidden;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;}
+#rotate-hint{display:none;position:fixed;inset:0;z-index:99999;background:rgba(245,243,239,0.96);flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:30px;}
+#rotate-hint .rot-icon{font-size:3rem;animation:tilt 1.5s ease-in-out infinite alternate;}
+@keyframes tilt{from{transform:rotate(-25deg);}to{transform:rotate(25deg);}}
+#rotate-hint p{font-family:var(--fm);font-size:0.82rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;line-height:1.9;}
+#rotate-hint .hint-btn{margin-top:6px;font-family:var(--fm);font-size:0.65rem;font-weight:600;padding:8px 20px;border-radius:6px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;border:1.5px solid var(--border2);color:var(--muted);background:transparent;}
+@media(orientation:portrait){#rotate-hint{display:flex;}}
+#app{display:flex;flex-direction:column;height:100vh;height:-webkit-fill-available;overflow:hidden;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+.modal-overlay.on{display:flex;}
+.modal{background:#fff;border:1px solid var(--border2);border-radius:14px;padding:24px 22px 20px;max-width:300px;width:85%;text-align:center;box-shadow:0 16px 48px rgba(0,0,0,0.18);}
+.m-icon{font-size:1.6rem;margin-bottom:10px;}.m-title{font-weight:700;font-size:0.9rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;}
+.m-body{font-family:var(--fm);font-size:0.65rem;color:var(--muted);line-height:1.8;margin-bottom:18px;}.m-btns{display:flex;gap:8px;}
+header{flex-shrink:0;position:relative;z-index:10;background:linear-gradient(180deg,#fff 0%,#f8f5f0 100%);border-bottom:1px solid var(--border2);padding:0 16px 10px;padding-top:max(10px,env(safe-area-inset-top,10px));box-shadow:0 2px 10px rgba(0,0,0,0.07);display:flex;align-items:center;}
+.h-bar{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent) 0%,var(--accent2) 35%,transparent 72%);}
+.h-left{display:flex;align-items:center;gap:10px;margin-top:10px;flex:1;}
+.h-logo-box{width:34px;height:34px;flex-shrink:0;background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-weight:700;font-size:0.65rem;color:#fff;letter-spacing:0.5px;box-shadow:0 2px 8px rgba(37,99,235,0.40);}
+.h-name{font-weight:700;font-size:1.15rem;letter-spacing:2.5px;color:var(--text);line-height:1;}
+.h-name em{color:var(--accent);font-style:normal;}
+.h-sub{font-family:var(--fm);font-size:0.55rem;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-top:3px;}
+.h-loc{font-family:var(--fm);font-size:0.6rem;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;display:flex;align-items:center;gap:5px;margin-top:10px;margin-left:14px;}
+.h-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);}
+.h-right{display:flex;align-items:center;margin-top:10px;}
+.btn{font-family:var(--fm);font-size:0.65rem;font-weight:600;padding:9px 14px;border-radius:7px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:5px;border:1px solid transparent;-webkit-tap-highlight-color:transparent;transition:opacity 0.12s;}
+.btn:active{opacity:0.55;}
+.btn-red{background:rgba(163,45,45,0.07);border-color:rgba(163,45,45,0.4);color:var(--red);}
+.btn-dim{background:rgba(0,0,0,0.04);border-color:var(--border2);color:var(--muted);}
+.btn-sm{font-size:0.62rem;padding:8px 14px;}
+.tabs{flex-shrink:0;display:flex;background:var(--bg2);border-bottom:1px solid var(--border2);padding:6px 14px;gap:6px;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.tab{flex:1;padding:5px 8px;min-width:fit-content;font-family:var(--fm);font-size:0.62rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--dim);cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:all 0.15s ease;white-space:nowrap;border-radius:5px;border:1.5px solid var(--border2);background:transparent;}
+.tab.active{color:var(--accent);border-color:var(--accent);background:var(--acc-bg);}
+.tab.tab-cliche.active{color:var(--teal);border-color:var(--teal);background:var(--teal-bg);}
+.tab.tab-gsm.active{color:var(--purple);border-color:var(--purple);background:var(--purple-bg);}
+.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:12px 14px;padding-bottom:max(14px,env(safe-area-inset-bottom,14px));}
+.tab-pane{display:none;}.tab-pane.active{display:block;}
+.legend{display:flex;flex-wrap:wrap;background:#fff;border:1px solid var(--border);border-radius:7px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,0.07);}
+.leg-item{display:flex;align-items:center;gap:6px;font-family:var(--fm);font-size:0.6rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:7px 12px;border-right:1px solid var(--border);flex:1;}
+.leg-item:last-child{border-right:none;}
+.leg-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid var(--border2);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.07);}
+table{width:100%;border-collapse:collapse;}
+thead th{background:var(--bg3);padding:9px 10px 7px;border-bottom:1px solid var(--border2);border-right:1px solid var(--border2);white-space:nowrap;text-align:center;position:relative;}
+thead th:last-child{border-right:none;}
+.thl{display:block;font-weight:700;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:1px;}
+.ths{display:block;font-family:var(--fm);font-size:0.54rem;color:var(--dim);}
+.th-tp{text-align:left !important;padding-left:14px !important;}.th-tp .thl{color:var(--accent);}
+.th-fx .thl{color:var(--blue);}.th-cl .thl{color:var(--green);}.th-pr .thl{color:var(--accent);}
+.th-ref .thl{color:var(--purple);}.th-dif .thl{color:var(--muted);}.th-teal .thl{color:var(--teal);}
+.th-orange .thl{color:var(--orange);}.th-purple .thl{color:var(--purple);}
+.th-fx::after,.th-cl::after,.th-pr::after,.th-ref::after,.th-dif::after,.th-teal::after,.th-orange::after,.th-purple::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.th-fx::after{background:var(--blue);opacity:0.7;}.th-cl::after{background:var(--green);opacity:0.7;}
+.th-pr::after{background:var(--accent);opacity:0.9;}.th-ref::after{background:var(--purple);opacity:0.7;}
+.th-dif::after{background:var(--muted);opacity:0.3;}.th-teal::after{background:var(--teal);opacity:0.7;}
+.th-orange::after{background:var(--orange);opacity:0.7;}.th-purple::after{background:var(--purple);opacity:0.7;}
+tbody td{padding:10px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);text-align:center;vertical-align:middle;font-size:0.9rem;}
+tbody td:last-child{border-right:none;}tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:rgba(184,112,9,0.025);}
+.td-tp{font-weight:700;font-size:0.85rem;letter-spacing:1px;color:var(--accent);background:var(--acc-bg);text-align:left !important;padding-left:14px !important;white-space:nowrap;min-width:120px;border-right:1px solid var(--border2) !important;}
+.td-fx{background:var(--blue-bg);color:var(--blue);font-family:var(--fm);font-size:0.88rem;font-weight:600;border-right:1px solid rgba(24,95,165,0.14) !important;border-bottom:1px solid rgba(24,95,165,0.07) !important;}
+.td-cl{background:var(--green-bg);color:var(--green);font-family:var(--fm);font-size:0.86rem;font-weight:600;min-width:84px;border-right:1px solid rgba(59,109,17,0.14) !important;border-bottom:1px solid rgba(59,109,17,0.07) !important;}
+.td-cl.e{color:var(--dim);font-size:0.76rem;font-weight:400;background:transparent;}
+.td-pr{background:var(--acc-bg);color:var(--accent);font-family:var(--fm);font-size:0.92rem;font-weight:700;min-width:92px;border-right:1px solid rgba(184,112,9,0.16) !important;border-bottom:1px solid rgba(184,112,9,0.09) !important;}
+.td-pr.e{color:var(--dim);font-size:0.76rem;font-weight:400;background:transparent;}
+.td-up{font-family:var(--fm);font-size:0.9rem;font-weight:700;color:var(--green);background:var(--green-bg);white-space:nowrap;min-width:88px;border-right:1px solid rgba(59,109,17,0.14) !important;border-bottom:1px solid rgba(59,109,17,0.07) !important;}
+.td-dn{font-family:var(--fm);font-size:0.9rem;font-weight:700;color:var(--red);background:rgba(163,45,45,0.07);white-space:nowrap;min-width:88px;border-right:1px solid rgba(163,45,45,0.14) !important;border-bottom:1px solid rgba(163,45,45,0.07) !important;}
+.td-eq{font-family:var(--fm);font-size:0.9rem;color:var(--dim);min-width:88px;}
+.td-pcskg{background:var(--orange-bg);color:var(--orange);font-family:var(--fm);font-size:0.92rem;font-weight:800;min-width:90px;border-right:1px solid rgba(194,80,10,0.16) !important;border-bottom:1px solid rgba(194,80,10,0.09) !important;}
+.td-pcskg.e{color:var(--dim);font-size:0.76rem;font-weight:400;background:transparent;}
+.td-pcskg .pcskg-unit{font-size:0.54rem;font-weight:500;opacity:0.65;margin-left:2px;}
+.td-ref-fixed{background:rgba(83,58,183,0.06);color:var(--purple);font-family:var(--fm);font-size:0.92rem;font-weight:700;border-bottom:1px solid rgba(83,58,183,0.09) !important;border-right:1px solid rgba(83,58,183,0.14) !important;white-space:nowrap;}
+.td-ref-fixed .ref-unit{font-size:0.62rem;font-weight:400;color:var(--purple);opacity:0.7;margin-left:3px;}
+.td-ref-fixed .ref-lock{font-size:0.55rem;color:var(--purple);opacity:0.5;margin-left:4px;}
+.td-teal{background:var(--teal-bg);color:var(--teal);font-family:var(--fm);font-size:0.92rem;font-weight:700;min-width:100px;border-right:1px solid rgba(14,116,144,0.14) !important;border-bottom:1px solid rgba(14,116,144,0.07) !important;}
+.td-teal.e{color:var(--dim);font-size:0.76rem;font-weight:400;background:transparent;}
+.td-tl-match{background:var(--green-bg) !important;color:var(--green) !important;font-family:var(--fm);font-size:0.86rem;font-weight:700;min-width:130px;border-right:1px solid rgba(59,109,17,0.14) !important;border-bottom:1px solid rgba(59,109,17,0.07) !important;}
+.td-tl-suggest{background:rgba(184,112,9,0.06) !important;color:var(--accent) !important;font-family:var(--fm);font-size:0.75rem;font-weight:500;min-width:130px;line-height:1.5;border-right:1px solid rgba(184,112,9,0.16) !important;border-bottom:1px solid rgba(184,112,9,0.09) !important;padding:6px 8px !important;}
+.td-tl-suggest .tl-val{font-size:0.9rem;font-weight:700;color:var(--text);display:block;margin-bottom:3px;}
+.td-tl-suggest .tl-hint{font-size:0.62rem;color:var(--muted);display:block;line-height:1.6;}
+.td-tl-suggest .tl-up{color:var(--green);font-weight:600;}.td-tl-suggest .tl-dn{color:var(--red);font-weight:600;}
+.l-wrap{position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:4px;}
+.l-warn-badge{display:none;font-family:var(--fm);font-size:0.55rem;font-weight:700;color:#fff;background:var(--red);border-radius:4px;padding:2px 6px;letter-spacing:0.5px;white-space:nowrap;line-height:1.4;max-width:130px;text-align:center;}
+.l-wrap.invalid input[type="number"]{border-color:var(--red) !important;background:rgba(163,45,45,0.06) !important;color:var(--red) !important;box-shadow:0 0 0 3px rgba(163,45,45,0.15) !important;}
+.l-wrap.invalid .l-warn-badge{display:block;}
+input[type="number"]{background:#fff;border:1.5px solid var(--border2);color:var(--text);padding:7px 5px;border-radius:6px;font-family:var(--fm);font-size:0.86rem;width:80px;text-align:center;-moz-appearance:textfield;-webkit-appearance:none;appearance:none;box-shadow:inset 0 1px 3px rgba(0,0,0,0.05);}
+input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none;}
+input[type="number"]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(184,112,9,0.12);}
+.inp-pr{border-color:rgba(184,112,9,0.38);color:var(--accent);width:96px;}
+.inp-teal{border-color:rgba(14,116,144,0.38);color:var(--teal);width:70px;}
+.inp-teal:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(14,116,144,0.1);}
+.inp-purple{border-color:rgba(83,58,183,0.38);color:var(--purple);width:90px;}
+.inp-purple:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(83,58,183,0.1);}
+.cyl-table-wrap{overflow-x:auto;background:#fff;border:1px solid var(--border2);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.07);margin-top:12px;}
+.cyl-table{width:100%;border-collapse:collapse;}
+.cyl-table thead th{background:#1a2e4a;color:#fff;padding:8px 14px 7px;font-family:var(--fm);font-size:0.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border-right:1px solid rgba(255,255,255,0.12);text-align:center;}
+.cyl-table thead th:last-child{border-right:none;}
+.cyl-table thead th span{display:block;font-size:0.5rem;font-weight:400;color:rgba(255,255,255,0.55);margin-top:2px;}
+.cyl-table tbody td{padding:7px 14px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);text-align:center;font-family:var(--fm);font-size:0.85rem;font-weight:600;}
+.cyl-table tbody td:last-child{border-right:none;}.cyl-table tbody tr:last-child td{border-bottom:none;}
+.cyl-table tbody tr:hover td{background:var(--blue-bg);}
+.cyl-m1{color:#185fa5 !important;}.cyl-m2{color:#533ab7 !important;}.cyl-m3{color:#3b6d11 !important;}.cyl-m4{color:#b87009 !important;}
+.td-target{background:rgba(83,58,183,0.04);border-bottom:1px solid rgba(83,58,183,0.09) !important;border-right:1px solid rgba(83,58,183,0.12) !important;vertical-align:top;padding-top:9px !important;}
+.ppkg-wrap{display:inline-flex;flex-direction:column;align-items:center;gap:5px;}
+.ppkg-note{display:none;font-family:var(--fm);font-size:0.58rem;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;padding:3px 8px;border-radius:20px;white-space:nowrap;border:1px solid transparent;}
+.ppkg-note.visible{display:block;}
+.ppkg-note.note-ok{color:var(--green);background:rgba(59,109,17,0.09);border-color:rgba(59,109,17,0.22);}
+.ppkg-note.note-warn{color:var(--red);background:rgba(163,45,45,0.08);border-color:rgba(163,45,45,0.25);}
+.ppkg-note .note-val{font-size:0.72rem;font-weight:800;}.ppkg-note .note-unit{font-size:0.54rem;font-weight:500;opacity:0.75;margin-left:2px;}
+input.inp-pr.over-target{border-color:var(--red) !important;background:rgba(163,45,45,0.06) !important;color:var(--red) !important;box-shadow:0 0 0 3px rgba(163,45,45,0.14) !important;}
+.cliche-info{background:linear-gradient(135deg,rgba(14,116,144,0.06) 0%,rgba(14,116,144,0.02) 100%);border:1px solid rgba(14,116,144,0.2);border-radius:7px;padding:9px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-family:var(--fm);font-size:0.6rem;color:var(--teal);}
+.cliche-formula{background:rgba(14,116,144,0.08);border-radius:5px;padding:3px 8px;font-weight:700;font-size:0.62rem;color:var(--teal);white-space:nowrap;}
 
-/* ROTATE HINT */
-#rotate-hint {
-  display: none; position: fixed; inset: 0; z-index: 99999;
-  background: rgba(245,243,239,0.96);
-  flex-direction: column; align-items: center; justify-content: center;
-  gap: 14px; text-align: center; padding: 30px;
-}
-#rotate-hint .rot-icon { font-size: 3rem; animation: tilt 1.5s ease-in-out infinite alternate; }
-@keyframes tilt { from { transform: rotate(-25deg); } to { transform: rotate(25deg); } }
-#rotate-hint p { font-family: var(--fm); font-size: 0.82rem; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; line-height: 1.9; }
-#rotate-hint .hint-btn {
-  margin-top: 6px; font-family: var(--fm); font-size: 0.65rem; font-weight: 600;
-  padding: 8px 20px; border-radius: 6px; cursor: pointer; letter-spacing: 1px; text-transform: uppercase;
-  border: 1.5px solid var(--border2); color: var(--muted); background: transparent;
-  -webkit-tap-highlight-color: transparent;
-}
-@media (orientation: portrait) { #rotate-hint { display: flex; } }
-
-/* APP */
-#app { display: flex; flex-direction: column; height: 100vh; height: -webkit-fill-available; overflow: hidden; }
-
-/* MODAL */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.35); z-index: 9999;
-  align-items: center; justify-content: center;
-  backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-}
-.modal-overlay.on { display: flex; }
-.modal {
-  background: #fff; border: 1px solid var(--border2); border-radius: 14px;
-  padding: 24px 22px 20px; max-width: 300px; width: 85%; text-align: center;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.18);
-}
-.m-icon  { font-size: 1.6rem; margin-bottom: 10px; }
-.m-title { font-weight: 700; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 7px; }
-.m-body  { font-family: var(--fm); font-size: 0.65rem; color: var(--muted); line-height: 1.8; margin-bottom: 18px; }
-.m-btns  { display: flex; gap: 8px; }
-
-/* HEADER */
-header {
-  flex-shrink: 0; position: relative; z-index: 10;
-  background: linear-gradient(180deg, #fff 0%, #f8f5f0 100%);
-  border-bottom: 1px solid var(--border2);
-  padding: 0 16px 10px;
-  padding-top: max(10px, env(safe-area-inset-top, 10px));
-  padding-left: max(16px, env(safe-area-inset-left, 16px));
-  padding-right: max(16px, env(safe-area-inset-right, 16px));
-  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-  display: flex; align-items: center;
-}
-.h-bar {
-  position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 35%, transparent 72%);
-}
-.h-left { display: flex; align-items: center; gap: 10px; margin-top: 10px; flex: 1; }
-.h-logo-box {
-  width: 34px; height: 34px; flex-shrink: 0;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  border-radius: 8px; display: flex; align-items: center; justify-content: center;
-  font-family: var(--fm); font-weight: 700; font-size: 0.65rem;
-  color: #fff; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(37,99,235,0.40);
-}
-.h-name { font-weight: 700; font-size: 1.15rem; letter-spacing: 2.5px; color: var(--text); line-height: 1; }
-.h-name em { color: var(--accent); font-style: normal; }
-.h-sub { font-family: var(--fm); font-size: 0.55rem; color: var(--dim); letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-top: 3px; }
-.h-loc { font-family: var(--fm); font-size: 0.6rem; color: var(--blue); letter-spacing: 1.5px; text-transform: uppercase; display: flex; align-items: center; gap: 5px; margin-top: 10px; padding-left: 2px; margin-left: 14px; }
-.h-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue); }
-.h-right { display: flex; align-items: center; margin-top: 10px; }
-
-/* BUTTONS */
-.btn {
-  font-family: var(--fm); font-size: 0.65rem; font-weight: 600;
-  padding: 9px 14px; border-radius: 7px; cursor: pointer;
-  letter-spacing: 1px; text-transform: uppercase;
-  display: flex; align-items: center; justify-content: center; gap: 5px;
-  border: 1px solid transparent; -webkit-tap-highlight-color: transparent; transition: opacity 0.12s;
-}
-.btn:active { opacity: 0.55; }
-.btn-red { background: rgba(163,45,45,0.07); border-color: rgba(163,45,45,0.4); color: var(--red); }
-.btn-dim { background: rgba(0,0,0,0.04); border-color: var(--border2); color: var(--muted); }
-.btn-sm  { font-size: 0.62rem; padding: 8px 14px; }
-
-/* TABS */
-.tabs {
-  flex-shrink: 0; display: flex; background: var(--bg2);
-  border-bottom: 1px solid var(--border2); padding: 6px 14px;
-  padding-left: max(14px, env(safe-area-inset-left, 14px));
-  padding-right: max(14px, env(safe-area-inset-right, 14px));
-  gap: 6px; align-items: center; overflow-x: auto; -webkit-overflow-scrolling: touch;
-}
-.tab {
-  flex: 1; padding: 5px 8px; min-width: fit-content;
-  font-family: var(--fm); font-size: 0.62rem; font-weight: 600;
-  letter-spacing: 1px; text-transform: uppercase; color: var(--dim);
-  cursor: pointer; text-align: center; -webkit-tap-highlight-color: transparent;
-  transition: all 0.15s ease; white-space: nowrap; border-radius: 5px;
-  border: 1.5px solid var(--border2); background: transparent;
-}
-.tab.active { color: var(--accent); border-color: var(--accent); background: var(--acc-bg); }
-.tab.tab-cliche.active { color: var(--teal); border-color: var(--teal); background: var(--teal-bg); }
-
-/* CONTENT */
-.content {
-  flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;
-  padding: 12px 14px;
-  padding-left: max(14px, env(safe-area-inset-left, 14px));
-  padding-right: max(14px, env(safe-area-inset-right, 14px));
-  padding-bottom: max(14px, env(safe-area-inset-bottom, 14px));
-}
-.tab-pane { display: none; }
-.tab-pane.active { display: block; }
-
-/* LEGEND */
-.legend {
-  display: flex; flex-wrap: wrap; background: #fff;
-  border: 1px solid var(--border); border-radius: 7px;
-  overflow: hidden; margin-bottom: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-}
-.leg-item {
-  display: flex; align-items: center; gap: 6px;
-  font-family: var(--fm); font-size: 0.6rem; color: var(--muted);
-  letter-spacing: 1px; text-transform: uppercase;
-  padding: 7px 12px; border-right: 1px solid var(--border); flex: 1;
-}
-.leg-item:last-child { border-right: none; }
-.leg-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-
-/* TABLE */
-.tw {
-  overflow-x: auto; -webkit-overflow-scrolling: touch;
-  background: #fff; border: 1px solid var(--border2);
-  border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-}
-table { width: 100%; border-collapse: collapse; }
-thead th {
-  background: var(--bg3); padding: 9px 10px 7px;
-  border-bottom: 1px solid var(--border2); border-right: 1px solid var(--border2);
-  white-space: nowrap; text-align: center; position: relative;
-}
-thead th:last-child { border-right: none; }
-.thl { display: block; font-weight: 700; font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1px; }
-.ths { display: block; font-family: var(--fm); font-size: 0.54rem; color: var(--dim); }
-.th-tp { text-align: left !important; padding-left: 14px !important; }
-.th-tp .thl  { color: var(--accent); }
-.th-fx .thl  { color: var(--blue); }
-.th-cl .thl  { color: var(--green); }
-.th-pr .thl  { color: var(--accent); }
-.th-ref .thl { color: var(--purple); }
-.th-dif .thl { color: var(--muted); }
-.th-teal .thl { color: var(--teal); }
-.th-orange .thl { color: var(--orange); }
-.th-fx::after,
-.th-cl::after,
-.th-pr::after,
-.th-ref::after,
-.th-dif::after,
-.th-teal::after,
-.th-orange::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-}
-.th-fx::after     { background: var(--blue);   opacity: 0.7; }
-.th-cl::after     { background: var(--green);  opacity: 0.7; }
-.th-pr::after     { background: var(--accent); opacity: 0.9; }
-.th-ref::after    { background: var(--purple); opacity: 0.7; }
-.th-dif::after    { background: var(--muted);  opacity: 0.3; }
-.th-teal::after   { background: var(--teal);   opacity: 0.7; }
-.th-orange::after { background: var(--orange); opacity: 0.7; }
-
-tbody td {
-  padding: 10px 10px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border);
-  text-align: center; vertical-align: middle; font-size: 0.9rem;
-}
-tbody td:last-child { border-right: none; }
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: rgba(184,112,9,0.025); }
-.td-tp {
-  font-weight: 700; font-size: 0.95rem; letter-spacing: 1.5px;
-  color: var(--accent); background: var(--acc-bg);
-  text-align: left !important; padding-left: 14px !important;
-  white-space: nowrap; min-width: 105px;
-  border-right: 1px solid var(--border2) !important;
-}
-.td-fx {
-  background: var(--blue-bg); color: var(--blue);
-  font-family: var(--fm); font-size: 0.88rem; font-weight: 600;
-  border-right: 1px solid rgba(24,95,165,0.14) !important;
-  border-bottom: 1px solid rgba(24,95,165,0.07) !important;
-}
-.td-cl {
-  background: var(--green-bg); color: var(--green);
-  font-family: var(--fm); font-size: 0.86rem; font-weight: 600; min-width: 84px;
-  border-right: 1px solid rgba(59,109,17,0.14) !important;
-  border-bottom: 1px solid rgba(59,109,17,0.07) !important;
-}
-.td-cl.e { color: var(--dim); font-size: 0.76rem; font-weight: 400; background: transparent; }
-.td-pr {
-  background: var(--acc-bg); color: var(--accent);
-  font-family: var(--fm); font-size: 0.92rem; font-weight: 700; min-width: 92px;
-  border-right: 1px solid rgba(184,112,9,0.16) !important;
-  border-bottom: 1px solid rgba(184,112,9,0.09) !important;
-}
-.td-pr.e { color: var(--dim); font-size: 0.76rem; font-weight: 400; background: transparent; }
-.td-up {
-  font-family: var(--fm); font-size: 0.9rem; font-weight: 700; color: var(--green);
-  background: var(--green-bg); white-space: nowrap; min-width: 88px;
-  border-right: 1px solid rgba(59,109,17,0.14) !important;
-  border-bottom: 1px solid rgba(59,109,17,0.07) !important;
-}
-.td-dn {
-  font-family: var(--fm); font-size: 0.9rem; font-weight: 700; color: var(--red);
-  background: rgba(163,45,45,0.07); white-space: nowrap; min-width: 88px;
-  border-right: 1px solid rgba(163,45,45,0.14) !important;
-  border-bottom: 1px solid rgba(163,45,45,0.07) !important;
-}
-.td-eq { font-family: var(--fm); font-size: 0.9rem; color: var(--dim); min-width: 88px; }
-
-/* Pcs / KG cell */
-.td-pcskg {
-  background: var(--orange-bg);
-  color: var(--orange);
-  font-family: var(--fm); font-size: 0.92rem; font-weight: 800;
-  min-width: 90px;
-  border-right: 1px solid rgba(194,80,10,0.16) !important;
-  border-bottom: 1px solid rgba(194,80,10,0.09) !important;
-}
-.td-pcskg.e { color: var(--dim); font-size: 0.76rem; font-weight: 400; background: transparent; }
-.td-pcskg .pcskg-unit {
-  font-size: 0.54rem; font-weight: 500; opacity: 0.65;
-  margin-left: 2px; letter-spacing: 0.5px;
-}
-
-/* FIXED MIN REF */
-.td-ref-fixed {
-  background: rgba(83,58,183,0.06);
-  color: var(--purple);
-  font-family: var(--fm); font-size: 0.92rem; font-weight: 700;
-  border-bottom: 1px solid rgba(83,58,183,0.09) !important;
-  border-right: 1px solid rgba(83,58,183,0.14) !important;
-  white-space: nowrap;
-}
-.td-ref-fixed .ref-unit {
-  font-size: 0.62rem; font-weight: 400; color: var(--purple); opacity: 0.7;
-  margin-left: 3px; letter-spacing: 0.5px;
-}
-.td-ref-fixed .ref-lock {
-  font-size: 0.55rem; font-weight: 500; color: var(--purple); opacity: 0.5;
-  margin-left: 4px; letter-spacing: 0.5px; text-transform: uppercase;
-}
-
-/* CLICHE TEAL CELLS */
-.td-teal {
-  background: var(--teal-bg); color: var(--teal);
-  font-family: var(--fm); font-size: 0.92rem; font-weight: 700; min-width: 100px;
-  border-right: 1px solid rgba(14,116,144,0.14) !important;
-  border-bottom: 1px solid rgba(14,116,144,0.07) !important;
-}
-.td-teal.e { color: var(--dim); font-size: 0.76rem; font-weight: 400; background: transparent; }
-
-/* Tube length cell states */
-.td-tl-match {
-  background: var(--green-bg) !important;
-  color: var(--green) !important;
-  font-family: var(--fm); font-size: 0.86rem; font-weight: 700;
-  min-width: 130px;
-  border-right: 1px solid rgba(59,109,17,0.14) !important;
-  border-bottom: 1px solid rgba(59,109,17,0.07) !important;
-}
-.td-tl-suggest {
-  background: rgba(184,112,9,0.06) !important;
-  color: var(--accent) !important;
-  font-family: var(--fm); font-size: 0.75rem; font-weight: 500;
-  min-width: 130px; line-height: 1.5;
-  border-right: 1px solid rgba(184,112,9,0.16) !important;
-  border-bottom: 1px solid rgba(184,112,9,0.09) !important;
-  padding: 6px 8px !important;
-}
-.td-tl-suggest .tl-val  { font-size: 0.9rem; font-weight: 700; color: var(--text); display: block; margin-bottom: 3px; }
-.td-tl-suggest .tl-hint { font-size: 0.62rem; color: var(--muted); display: block; line-height: 1.6; }
-.td-tl-suggest .tl-up   { color: var(--green); font-weight: 600; }
-.td-tl-suggest .tl-dn   { color: var(--red);   font-weight: 600; }
-
-/* ── L INPUT WRAPPER ───────────────────────────────────────── */
-.l-wrap { position: relative; display: inline-flex; flex-direction: column; align-items: center; gap: 4px; }
-.l-warn-badge {
-  display: none;
-  font-family: var(--fm); font-size: 0.55rem; font-weight: 700;
-  color: #fff; background: var(--red);
-  border-radius: 4px; padding: 2px 6px;
-  letter-spacing: 0.5px; white-space: nowrap;
-  line-height: 1.4;
-  max-width: 130px; text-align: center;
-  animation: fadeInDown 0.18s ease;
-}
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.l-wrap.invalid input[type="number"] {
-  border-color: var(--red) !important;
-  background: rgba(163,45,45,0.06) !important;
-  color: var(--red) !important;
-  box-shadow: 0 0 0 3px rgba(163,45,45,0.15) !important;
-}
-.l-wrap.invalid .l-warn-badge { display: block; }
-
-/* INPUTS */
-input[type="number"] {
-  background: #fff; border: 1.5px solid var(--border2); color: var(--text);
-  padding: 7px 5px; border-radius: 6px; font-family: var(--fm); font-size: 0.86rem;
-  width: 80px; text-align: center;
-  -moz-appearance: textfield; -webkit-appearance: none; appearance: none;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-}
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
-input[type="number"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184,112,9,0.12); }
-.l-wrap.invalid input[type="number"]:focus {
-  border-color: var(--red) !important;
-  box-shadow: 0 0 0 3px rgba(163,45,45,0.18) !important;
-}
-.inp-pr   { border-color: rgba(184,112,9,0.38); color: var(--accent); width: 96px; }
-.inp-teal { border-color: rgba(14,116,144,0.38); color: var(--teal); width: 70px; }
-.inp-teal:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(14,116,144,0.1); }
-
-/* CYLINDERS TABLE */
-.cyl-table-wrap {
-  overflow-x: auto; -webkit-overflow-scrolling: touch;
-  background: #fff; border: 1px solid var(--border2);
-  border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-  margin-top: 12px;
-}
-.cyl-table { width: 100%; border-collapse: collapse; }
-.cyl-table thead th {
-  background: #1a2e4a; color: #fff;
-  padding: 8px 14px 7px; font-family: var(--fm);
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px;
-  text-transform: uppercase; border-right: 1px solid rgba(255,255,255,0.12);
-  text-align: center;
-}
-.cyl-table thead th:last-child { border-right: none; }
-.cyl-table thead th span { display: block; font-size: 0.5rem; font-weight: 400; color: rgba(255,255,255,0.55); letter-spacing: 1px; margin-top: 2px; }
-.cyl-table tbody td {
-  padding: 7px 14px; border-bottom: 1px solid var(--border);
-  border-right: 1px solid var(--border);
-  text-align: center; font-family: var(--fm); font-size: 0.85rem;
-  color: var(--blue); font-weight: 600;
-}
-.cyl-table tbody td:last-child { border-right: none; }
-.cyl-table tbody tr:last-child td { border-bottom: none; }
-.cyl-table tbody tr:hover td { background: var(--blue-bg); }
-.cyl-m1 { color: #185fa5 !important; }
-.cyl-m2 { color: #533ab7 !important; }
-.cyl-m3 { color: #3b6d11 !important; }
-.cyl-m4 { color: #b87009 !important; }
-
-/* ── TARGET PRICE CELL ──────────────────────────────────────── */
-.td-target {
-  background: rgba(83,58,183,0.04);
-  border-bottom: 1px solid rgba(83,58,183,0.09) !important;
-  border-right: 1px solid rgba(83,58,183,0.12) !important;
-  vertical-align: top; padding-top: 9px !important;
-}
-
-/* The derived kg note shown under Price/KG input */
-.ppkg-wrap {
-  display: inline-flex; flex-direction: column; align-items: center; gap: 5px;
-}
-.ppkg-note {
-  display: none;
-  font-family: var(--fm); font-size: 0.58rem; font-weight: 600;
-  letter-spacing: 0.8px; text-transform: uppercase;
-  padding: 3px 8px; border-radius: 20px;
-  white-space: nowrap; animation: noteIn 0.2s ease;
-  border: 1px solid transparent;
-}
-@keyframes noteIn {
-  from { opacity: 0; transform: translateY(-3px) scale(0.95); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-.ppkg-note.visible { display: block; }
-.ppkg-note.note-ok {
-  color: var(--green); background: rgba(59,109,17,0.09);
-  border-color: rgba(59,109,17,0.22);
-}
-.ppkg-note.note-warn {
-  color: var(--red); background: rgba(163,45,45,0.08);
-  border-color: rgba(163,45,45,0.25);
-}
-.ppkg-note .note-icon { margin-right: 3px; font-size: 0.62rem; }
-.ppkg-note .note-val  { font-size: 0.72rem; font-weight: 800; }
-.ppkg-note .note-unit { font-size: 0.54rem; font-weight: 500; opacity: 0.75; margin-left: 2px; }
-
-/* Highlight Price/KG input when it exceeds the target-derived KG price */
-input.inp-pr.over-target {
-  border-color: var(--red) !important;
-  background: rgba(163,45,45,0.06) !important;
-  color: var(--red) !important;
-  box-shadow: 0 0 0 3px rgba(163,45,45,0.14) !important;
-}
-
-/* Cliche info box */
-.cliche-info {
-  background: linear-gradient(135deg, rgba(14,116,144,0.06) 0%, rgba(14,116,144,0.02) 100%);
-  border: 1px solid rgba(14,116,144,0.2);
-  border-radius: 7px; padding: 9px 14px; margin-bottom: 12px;
-  display: flex; align-items: center; gap: 10px;
-  font-family: var(--fm); font-size: 0.6rem; color: var(--teal);
-  letter-spacing: 1px;
-}
-.cliche-formula {
-  background: rgba(14,116,144,0.08); border-radius: 5px;
-  padding: 3px 8px; font-weight: 700; font-size: 0.62rem;
-  color: var(--teal); white-space: nowrap;
-}
+/* GSM CALCULATOR */
+.gsm-info{background:linear-gradient(135deg,rgba(83,58,183,0.06) 0%,rgba(83,58,183,0.02) 100%);border:1px solid rgba(83,58,183,0.2);border-radius:7px;padding:12px 16px;margin-bottom:12px;font-family:var(--fm);font-size:0.6rem;color:var(--purple);}
+.gsm-info-grid{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;}
+.gsm-formula-block{display:flex;flex-direction:column;gap:5px;flex:1;min-width:200px;}
+.gsm-formula-block strong{font-size:0.65rem;color:var(--purple);font-weight:700;}
+.gsm-formula{background:rgba(83,58,183,0.08);border-radius:5px;padding:4px 10px;font-weight:700;font-size:0.6rem;color:var(--purple);white-space:nowrap;}
+.gsm-formula-note{font-size:0.57rem;color:var(--muted);}
+.gsm-divider{width:1px;background:rgba(83,58,183,0.2);align-self:stretch;min-height:40px;}
+.td-gsm-result{background:var(--purple-bg);color:var(--purple);font-family:var(--fm);font-size:1.05rem;font-weight:800;min-width:120px;border-right:1px solid rgba(83,58,183,0.16) !important;border-bottom:1px solid rgba(83,58,183,0.09) !important;}
+.td-gsm-result.e{color:var(--dim);font-size:0.76rem;font-weight:400;background:transparent;}
+.td-gsm-result .gsm-unit{font-size:0.56rem;font-weight:500;opacity:0.65;margin-left:3px;}
+.td-gsm-rmw{background:var(--orange-bg);color:var(--orange);font-family:var(--fm);font-size:0.88rem;font-weight:700;min-width:90px;border-right:1px solid rgba(194,80,10,0.16) !important;border-bottom:1px solid rgba(194,80,10,0.09) !important;}
+.td-gsm-rmw.e{color:var(--dim);font-size:0.76rem;font-weight:400;background:transparent;}
+.td-gsm-tl{background:var(--green-bg);color:var(--green);font-family:var(--fm);font-size:0.88rem;font-weight:700;min-width:100px;border-right:1px solid rgba(59,109,17,0.14) !important;border-bottom:1px solid rgba(59,109,17,0.07) !important;}
+.td-gsm-tl.e{color:var(--dim);font-size:0.76rem;font-weight:400;background:transparent;}
+.gsm-type-badge{display:inline-block;font-family:var(--fm);font-size:0.5rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:2px 6px;border-radius:8px;margin-left:5px;color:var(--teal);background:var(--teal-bg);border:1px solid rgba(14,116,144,0.25);vertical-align:middle;}
+.gsm-wpc-cell{background:rgba(83,58,183,0.04);border-bottom:1px solid rgba(83,58,183,0.09) !important;border-right:1px solid rgba(83,58,183,0.12) !important;}
 </style>
-
 </head>
 <body>
-
-<!-- ROTATE HINT -->
-
 <div id="rotate-hint">
   <div class="rot-icon">📱</div>
   <p>Best viewed in landscape<br>Rotate your device</p>
   <button class="hint-btn" onclick="document.getElementById('rotate-hint').style.display='none'">Continue anyway</button>
 </div>
-
-<!-- MODAL -->
-
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="m-icon">🗑</div>
     <div class="m-title">Clear All Entries</div>
-    <div class="m-body">All manually entered values will be<br>cleared. This cannot be undone.</div>
+    <div class="m-body">All manually entered values will be cleared. This cannot be undone.</div>
     <div class="m-btns">
       <button class="btn btn-dim btn-sm" onclick="closeModal()">Cancel</button>
       <button class="btn btn-red btn-sm" onclick="confirmClear()">Clear All</button>
     </div>
   </div>
 </div>
-
-<!-- APP -->
-
 <div id="app">
   <header>
     <div class="h-bar"></div>
@@ -546,533 +181,387 @@ input.inp-pr.over-target {
         <div class="h-name">PTD <em>Bags</em></div>
         <span class="h-sub">Industrial Pricing System</span>
       </div>
-      <div class="h-loc">
-        <div class="h-dot"></div>
-        Century Gate
-      </div>
+      <div class="h-loc"><div class="h-dot"></div>Century Gate</div>
     </div>
     <div class="h-right">
       <button class="btn btn-red" onclick="document.getElementById('modal').classList.add('on')">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14H6L5 6"/>
-          <path d="M10 11v6M14 11v6M9 6V4h6v2"/>
-        </svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>
         Clear All
       </button>
     </div>
   </header>
-
   <div class="tabs">
-    <div class="tab active"      onclick="switchTab(0)">Specifications</div>
-    <div class="tab"             onclick="switchTab(1)">Price / KG</div>
-    <div class="tab"             onclick="switchTab(2)">Final Pricing</div>
-    <div class="tab tab-cliche"  onclick="switchTab(3)">Cliché</div>
-    <div class="tab"             onclick="switchTab(4)">Cylinders</div>
+    <div class="tab active"     onclick="switchTab(0)">Specifications</div>
+    <div class="tab"            onclick="switchTab(1)">Price / KG</div>
+    <div class="tab"            onclick="switchTab(2)">Final Pricing</div>
+    <div class="tab tab-cliche" onclick="switchTab(3)">Cliché</div>
+    <div class="tab"            onclick="switchTab(4)">Cylinders</div>
+    <div class="tab tab-gsm"    onclick="switchTab(5)">GSM Calc</div>
   </div>
-
   <div class="content">
 
-```
-<!-- PANE 0: Specifications -->
-<div class="tab-pane active" id="pane0">
-  <div class="legend">
-    <div class="leg-item"><div class="leg-dot" style="background:var(--dim)"></div>Manual</div>
-    <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>Fixed</div>
-    <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Calculated</div>
-    <div class="leg-item"><div class="leg-dot" style="background:var(--accent)"></div>Pricing</div>
-    <div class="leg-item"><div class="leg-dot" style="background:var(--orange)"></div>Pcs/KG</div>
-  </div>
-  <div class="tw"><table>
-    <thead><tr>
-      <th class="th-tp"><span class="thl">Type</span></th>
-      <th><span class="thl">Length (L)</span><span class="ths">cm · manual</span></th>
-      <th><span class="thl">Width (W)</span><span class="ths">cm · manual</span></th>
-      <th><span class="thl">Gusset (G)</span><span class="ths">cm · manual</span></th>
-      <th class="th-fx"><span class="thl">Overlap</span><span class="ths">fixed = 4</span></th>
-      <th><span class="thl">GSM</span><span class="ths">manual</span></th>
-      <th class="th-cl"><span class="thl">R/M Width</span><span class="ths">W+W+G+G+4</span></th>
-      <th class="th-cl"><span class="thl">Tube Length</span><span class="ths">see formula per type</span></th>
-      <th class="th-cl"><span class="thl">Weight/Pc (g)</span><span class="ths">see formula per type</span></th>
-      <th class="th-orange"><span class="thl">Pcs / KG</span><span class="ths">1000 ÷ Wt/Pc</span></th>
-    </tr></thead>
-    <tbody id="t1"></tbody>
-  </table></div>
-</div>
+    <!-- PANE 0 -->
+    <div class="tab-pane active" id="pane0">
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:var(--dim)"></div>Manual</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>Fixed</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Calculated</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--accent)"></div>Pricing</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--orange)"></div>Pcs/KG</div>
+      </div>
+      <div class="tw"><table>
+        <thead><tr>
+          <th class="th-tp"><span class="thl">Type</span></th>
+          <th><span class="thl">Length (L)</span><span class="ths">cm · manual</span></th>
+          <th><span class="thl">Width (W)</span><span class="ths">cm · manual</span></th>
+          <th><span class="thl">Gusset (G)</span><span class="ths">cm · manual</span></th>
+          <th class="th-fx"><span class="thl">Overlap</span><span class="ths">fixed = 4</span></th>
+          <th><span class="thl">GSM</span><span class="ths">manual</span></th>
+          <th class="th-cl"><span class="thl">R/M Width</span><span class="ths">W+W+G+G+4</span></th>
+          <th class="th-cl"><span class="thl">Tube Length</span><span class="ths">formula per type</span></th>
+          <th class="th-cl"><span class="thl">Weight/Pc (g)</span><span class="ths">formula per type</span></th>
+          <th class="th-orange"><span class="thl">Pcs / KG</span><span class="ths">1000 ÷ Wt/Pc</span></th>
+        </tr></thead>
+        <tbody id="t1"></tbody>
+      </table></div>
+    </div>
 
-<!-- PANE 1: Price / KG -->
-<div class="tab-pane" id="pane1">
-  <div class="tw"><table>
-    <thead><tr>
-      <th class="th-tp"><span class="thl">Type</span></th>
-      <th class="th-ref"><span class="thl">Min Ref / KG</span><span class="ths">fixed reference price</span></th>
-      <th class="th-pr"><span class="thl">Price / KG</span><span class="ths">enter manually</span></th>
-      <th class="th-dif"><span class="thl">vs Min Ref</span><span class="ths">difference</span></th>
-      <th class="th-ref"><span class="thl">Target Price / Pc</span><span class="ths">customer current price · SR</span></th>
-    </tr></thead>
-    <tbody id="t2"></tbody>
-  </table></div>
-</div>
+    <!-- PANE 1 -->
+    <div class="tab-pane" id="pane1">
+      <div class="tw"><table>
+        <thead><tr>
+          <th class="th-tp"><span class="thl">Type</span></th>
+          <th class="th-ref"><span class="thl">Min Ref / KG</span><span class="ths">fixed reference</span></th>
+          <th class="th-pr"><span class="thl">Price / KG</span><span class="ths">enter manually</span></th>
+          <th class="th-dif"><span class="thl">vs Min Ref</span><span class="ths">difference</span></th>
+          <th class="th-ref"><span class="thl">Target Price / Pc</span><span class="ths">SR</span></th>
+        </tr></thead>
+        <tbody id="t2"></tbody>
+      </table></div>
+    </div>
 
-<!-- PANE 2: Final Pricing -->
-<div class="tab-pane" id="pane2">
-  <div class="tw"><table>
-    <thead><tr>
-      <th class="th-tp"><span class="thl">Type</span></th>
-      <th class="th-cl"><span class="thl">Price / Pc</span><span class="ths">Wt/Pc × Price/KG ÷ 1000</span></th>
-      <th><span class="thl">Packing (pcs/CTN)</span><span class="ths">manual</span></th>
-      <th class="th-cl"><span class="thl">Weight/CTN (kg)</span><span class="ths">Wt/Pc × Packing ÷ 1000</span></th>
-      <th class="th-pr"><span class="thl">Price / CTN</span><span class="ths">Packing × Price/Pc</span></th>
-    </tr></thead>
-    <tbody id="t3"></tbody>
-  </table></div>
-</div>
+    <!-- PANE 2 -->
+    <div class="tab-pane" id="pane2">
+      <div class="tw"><table>
+        <thead><tr>
+          <th class="th-tp"><span class="thl">Type</span></th>
+          <th class="th-cl"><span class="thl">Price / Pc</span><span class="ths">Wt/Pc × Price/KG ÷ 1000</span></th>
+          <th><span class="thl">Packing (pcs/CTN)</span><span class="ths">manual</span></th>
+          <th class="th-cl"><span class="thl">Weight/CTN (kg)</span><span class="ths">Wt/Pc × Packing ÷ 1000</span></th>
+          <th class="th-pr"><span class="thl">Price / CTN</span><span class="ths">Packing × Price/Pc</span></th>
+        </tr></thead>
+        <tbody id="t3"></tbody>
+      </table></div>
+    </div>
 
-<!-- PANE 3: Cliché -->
-<div class="tab-pane" id="pane3">
-  <div class="cliche-info">
-    <span>Formula:</span>
-    <span class="cliche-formula">RMW × Tube Length × No. of Colors × 0.18</span>
-    <span style="color:var(--muted);">— auto from Specifications</span>
-  </div>
-  <div class="tw"><table>
-    <thead><tr>
-      <th class="th-tp"><span class="thl">Type</span></th>
-      <th class="th-cl"><span class="thl">R/M Width</span><span class="ths">auto from specs</span></th>
-      <th class="th-cl"><span class="thl">Tube Length</span><span class="ths">auto from specs</span></th>
-      <th class="th-teal"><span class="thl">No. of Colors</span><span class="ths">enter manually</span></th>
-      <th class="th-teal"><span class="thl">Cliché Price</span><span class="ths">SR · calculated</span></th>
-    </tr></thead>
-    <tbody id="t4"></tbody>
-  </table></div>
-</div>
+    <!-- PANE 3 -->
+    <div class="tab-pane" id="pane3">
+      <div class="cliche-info">
+        <span>Formula:</span>
+        <span class="cliche-formula">RMW × Tube Length × No. of Colors × 0.18</span>
+        <span style="color:var(--muted);">— auto from Specifications</span>
+      </div>
+      <div class="tw"><table>
+        <thead><tr>
+          <th class="th-tp"><span class="thl">Type</span></th>
+          <th class="th-cl"><span class="thl">R/M Width</span><span class="ths">auto</span></th>
+          <th class="th-cl"><span class="thl">Tube Length</span><span class="ths">auto</span></th>
+          <th class="th-teal"><span class="thl">No. of Colors</span><span class="ths">manual</span></th>
+          <th class="th-teal"><span class="thl">Cliché Price</span><span class="ths">SR</span></th>
+        </tr></thead>
+        <tbody id="t4"></tbody>
+      </table></div>
+    </div>
 
-<!-- PANE 4: Cylinders -->
-<div class="tab-pane" id="pane4">
-  <div class="legend">
-    <div class="leg-item"><div class="leg-dot" style="background:#185fa5"></div>Machine 1</div>
-    <div class="leg-item"><div class="leg-dot" style="background:#533ab7"></div>Machine 2</div>
-    <div class="leg-item"><div class="leg-dot" style="background:#3b6d11"></div>Machine 3</div>
-    <div class="leg-item"><div class="leg-dot" style="background:#b87009"></div>Machine 4</div>
-  </div>
-  <div class="cyl-table-wrap">
-    <table class="cyl-table">
-      <thead><tr>
-        <th class="cyl-m1">Machine 1<span>cylinders</span></th>
-        <th class="cyl-m2">Machine 2<span>cylinders</span></th>
-        <th class="cyl-m3">Machine 3<span>cylinders</span></th>
-        <th class="cyl-m4">Machine 4<span>cylinders</span></th>
-      </tr></thead>
-      <tbody id="cylTable"></tbody>
-    </table>
-  </div>
-</div>
-```
+    <!-- PANE 4 -->
+    <div class="tab-pane" id="pane4">
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#185fa5"></div>Machine 1</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#533ab7"></div>Machine 2</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#3b6d11"></div>Machine 3</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#b87009"></div>Machine 4</div>
+      </div>
+      <div class="cyl-table-wrap">
+        <table class="cyl-table">
+          <thead><tr>
+            <th class="cyl-m1">Machine 1<span>cylinders</span></th>
+            <th class="cyl-m2">Machine 2<span>cylinders</span></th>
+            <th class="cyl-m3">Machine 3<span>cylinders</span></th>
+            <th class="cyl-m4">Machine 4<span>cylinders</span></th>
+          </tr></thead>
+          <tbody id="cylTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PANE 5: GSM CALCULATOR -->
+    <div class="tab-pane" id="pane5">
+      <div class="gsm-info">
+        <div class="gsm-info-grid">
+          <div class="gsm-formula-block">
+            <strong>Satchel / Large Sat</strong>
+            <span class="gsm-formula">GSM = Wt/Pc ÷ (RMW × TL) × 10000</span>
+            <span class="gsm-formula-note">TL = L + 2 &nbsp;|&nbsp; RMW = W+W+G+G+4</span>
+          </div>
+          <div class="gsm-divider"></div>
+          <div class="gsm-formula-block">
+            <strong>SOS Bag</strong>
+            <span class="gsm-formula">GSM = Wt/Pc ÷ (RMW × TL) × 10000</span>
+            <span class="gsm-formula-note">TL = L + (G+4)/2 &nbsp;|&nbsp; RMW = W+W+G+G+4</span>
+          </div>
+          <div class="gsm-divider"></div>
+          <div class="gsm-formula-block">
+            <strong>TH Bag</strong>
+            <span class="gsm-formula">GSM = (Wt/Pc − 7.5) ÷ (TL × RMW) × 10000</span>
+            <span class="gsm-formula-note">TL = L + (G+4)/2 &nbsp;|&nbsp; RMW = W+W+G+G+4</span>
+          </div>
+        </div>
+      </div>
+      <div class="tw"><table>
+        <thead><tr>
+          <th class="th-tp"><span class="thl">Bag Type</span><span class="ths">tube length formula</span></th>
+          <th><span class="thl">Length (L)</span><span class="ths">cm · manual</span></th>
+          <th><span class="thl">Width (W)</span><span class="ths">cm · manual</span></th>
+          <th><span class="thl">Gusset (G)</span><span class="ths">cm · manual</span></th>
+          <th class="th-orange"><span class="thl">R/M Width</span><span class="ths">W+W+G+G+4</span></th>
+          <th class="th-cl"><span class="thl">Tube Length</span><span class="ths">per formula</span></th>
+          <th class="th-purple"><span class="thl">Weight / Pc (g)</span><span class="ths">manual · decimals ok</span></th>
+          <th class="th-purple"><span class="thl">GSM Result</span><span class="ths">g/m² · calculated</span></th>
+        </tr></thead>
+        <tbody id="tGSM"></tbody>
+      </table></div>
+    </div>
 
   </div>
 </div>
 
 <script>
-// ── CYLINDER DATA ──────────────────────────────────────────────────────────────
-const CYLINDERS = {
-  m1: [32,35,37,40,43,46,54,59],
-  m2: [30,37,40,43,46,49,56,59,70],
-  m3: [30,32,33,35,37,40,41,43,46,50,56],
-  m4: [30,33,35,37,38,40,43,46,49,52]
-};
+const CYLINDERS={m1:[32,35,37,40,43,46,54,59],m2:[30,37,40,43,46,49,56,59,70],m3:[30,32,33,35,37,40,41,43,46,50,56],m4:[30,33,35,37,38,40,43,46,49,52]};
+function getAllCylinders(){const all=new Set();Object.values(CYLINDERS).forEach(a=>a.forEach(v=>all.add(v)));return Array.from(all).sort((a,b)=>a-b);}
+function machinesFor(val){return['m1','m2','m3','m4'].map((k,i)=>CYLINDERS[k].includes(val)?['M1','M2','M3','M4'][i]:null).filter(Boolean);}
+function nearestCylinders(tl){const all=getAllCylinders();let below=null,above=null;for(let i=0;i<all.length;i++){if(all[i]<tl)below=all[i];if(all[i]>tl&&above===null)above=all[i];}return{below,above};}
 
-function getAllCylinders() {
-  const all = new Set();
-  Object.values(CYLINDERS).forEach(function(arr){ arr.forEach(function(v){ all.add(v); }); });
-  return Array.from(all).sort(function(a,b){ return a-b; });
-}
-function machinesFor(val) {
-  const names=['M1','M2','M3','M4'], keys=['m1','m2','m3','m4'];
-  return keys.map(function(k,i){ return CYLINDERS[k].includes(val)?names[i]:null; }).filter(Boolean);
-}
-function nearestCylinders(tl) {
-  const all = getAllCylinders();
-  let below=null, above=null;
-  for (let i=0; i<all.length; i++) {
-    if (all[i] < tl) below = all[i];
-    if (all[i] > tl && above===null) above = all[i];
-  }
-  return { below, above };
-}
-
-// ── FIXED MIN REF PRICES ───────────────────────────────────────────────────────
-const MIN_REF = {
-  'LARGE SAT': 7,
-  'SOS':       8.5,
-  'TH':        12
-};
-
-// ── BAG TYPES ──────────────────────────────────────────────────────────────────
-const TYPES = [
-  {type:'LARGE SAT', L:'', W:'', G:'', GSM:'', ppkg:'', pack:''},
-  {type:'SOS',       L:'', W:'', G:'', GSM:'', ppkg:'', pack:''},
-  {type:'TH',        L:'', W:'', G:'', GSM:'', ppkg:'', pack:''},
+const MIN_REF={'LARGE SAT':7,'SOS':8.5,'TH':12};
+const TYPES=[
+  {type:'LARGE SAT',L:'',W:'',G:'',GSM:'',ppkg:'',pack:''},
+  {type:'SOS',L:'',W:'',G:'',GSM:'',ppkg:'',pack:''},
+  {type:'TH',L:'',W:'',G:'',GSM:'',ppkg:'',pack:''}
 ];
-let R = TYPES.map(function(r){ return Object.assign({},r); });
+let R=TYPES.map(r=>Object.assign({},r));
+let CLICHE_COLORS={'LARGE SAT':'','SOS':'','TH':''};
+let TARGET_PRICE={'LARGE SAT':'','SOS':'','TH':''};
 
-let CLICHE_COLORS = {'LARGE SAT':'', 'SOS':'', 'TH':''};
-let TARGET_PRICE  = {'LARGE SAT':'', 'SOS':'', 'TH':''};
+// GSM Calculator — 3 bag types, all with decimal support
+const GSM_DEFS=[
+  {type:'SATCHEL', label:'Satchel / Large Sat', badge:'TL = L+2'},
+  {type:'SOS',     label:'SOS Bag',             badge:'TL = L+(G+4)/2'},
+  {type:'TH',      label:'TH Bag',              badge:'TL = L+(G+4)/2'}
+];
+let GR=GSM_DEFS.map(r=>Object.assign({},r,{L:'',W:'',G:'',wpc:''}));
 
-const nv  = function(v){ var x=parseFloat(v); return isNaN(x)?0:x; };
-const ok  = function(v){ return v!==''&&v!==null&&v!==undefined; };
-const iv  = function(v){ return ok(v)?v:''; };
+const nv=v=>{const x=parseFloat(v);return isNaN(x)?0:x;};
+const ok=v=>v!==''&&v!==null&&v!==undefined;
+const iv=v=>ok(v)?v:'';
 
-// ── L VALIDATION ───────────────────────────────────────────────────────────────
-function isLInvalid(r) {
-  if (r.type === 'LARGE SAT') return false;
-  if (!ok(r.L) || !ok(r.G)) return false;
-  const L = nv(r.L), G = nv(r.G);
-  return L <= G + G/2 + 4;
-}
-function minLRequired(r) {
-  if (r.type === 'LARGE SAT') return null;
-  if (!ok(r.G)) return null;
-  const G = nv(r.G);
-  return G + G/2 + 4;
-}
+function isLInvalid(r){if(r.type==='LARGE SAT')return false;if(!ok(r.L)||!ok(r.G))return false;return nv(r.L)<=nv(r.G)+nv(r.G)/2+4;}
+function minLRequired(r){if(r.type==='LARGE SAT')return null;if(!ok(r.G))return null;const G=nv(r.G);return G+G/2+4;}
 
-// ── CALC PER TYPE ──────────────────────────────────────────────────────────────
-function calc(r) {
-  const L=nv(r.L), W=nv(r.W), G=nv(r.G), GSM=nv(r.GSM);
-  const rmw = (ok(r.W)&&ok(r.G)) ? W+W+G+G+4 : 0;
-
-  let tl = 0;
-  if (r.type==='LARGE SAT') {
-    tl = ok(r.L) ? L+2 : 0;
-  } else if (r.type==='SOS') {
-    tl = (ok(r.L)&&ok(r.G)) ? L+G/2+2 : 0;
-  } else if (r.type==='TH') {
-    tl = (ok(r.L)&&ok(r.G)) ? L+G/2+2 : 0;
-  }
-
-  let wpc = 0;
-  if (r.type==='TH') {
-    wpc = (rmw&&tl&&GSM) ? (tl*rmw*GSM)/10000+7.5 : 0;
-  } else {
-    wpc = (rmw&&tl&&GSM) ? (tl*rmw*GSM)/10000 : 0;
-  }
-
-  // Pcs per KG = 1000 / weight-per-piece (in grams)
-  const pcskg = wpc ? 1000 / wpc : 0;
-
-  const pp=nv(r.ppkg), pk=nv(r.pack);
-  const ppc  = (wpc&&pp) ? wpc*pp/1000 : 0;
-  const wctn = (wpc&&pk) ? wpc*pk/1000 : 0;
-  const pctn = (ppc&&pk) ? pk*ppc : 0;
-
-  const colors = nv(CLICHE_COLORS[r.type]);
-  const cliche = (rmw&&tl&&colors) ? rmw*tl*colors*0.18 : 0;
-
-  return {rmw, tl, wpc, pcskg, ppc, wctn, pctn, cliche};
+function calc(r){
+  const L=nv(r.L),W=nv(r.W),G=nv(r.G),GSM=nv(r.GSM);
+  const rmw=(ok(r.W)&&ok(r.G))?W+W+G+G+4:0;
+  let tl=0;
+  if(r.type==='LARGE SAT'){tl=ok(r.L)?L+2:0;}
+  else if(r.type==='SOS'||r.type==='TH'){tl=(ok(r.L)&&ok(r.G))?L+G/2+2:0;}
+  let wpc=0;
+  if(r.type==='TH'){wpc=(rmw&&tl&&GSM)?(tl*rmw*GSM)/10000+7.5:0;}
+  else{wpc=(rmw&&tl&&GSM)?(tl*rmw*GSM)/10000:0;}
+  const pcskg=wpc?1000/wpc:0;
+  const pp=nv(r.ppkg),pk=nv(r.pack);
+  const ppc=(wpc&&pp)?wpc*pp/1000:0;
+  const wctn=(wpc&&pk)?wpc*pk/1000:0;
+  const pctn=(ppc&&pk)?pk*ppc:0;
+  const colors=nv(CLICHE_COLORS[r.type]);
+  const cliche=(rmw&&tl&&colors)?rmw*tl*colors*0.18:0;
+  return{rmw,tl,wpc,pcskg,ppc,wctn,pctn,cliche};
 }
 
-const fmt = function(v,d){
-  if (!v||v===0) return null;
-  return parseFloat(v.toFixed(d)).toLocaleString('en-US',{maximumFractionDigits:d});
-};
+// GSM Calculator — computes GSM from dimensions + weight/pc
+function calcGSM(g){
+  const L=nv(g.L),W=nv(g.W),G=nv(g.G),wpc=nv(g.wpc);
+  if(!ok(g.W)||!ok(g.G))return{rmw:0,tl:0,gsm:0};
+  const rmw=W+W+G+G+4;
+  let tl=0;
+  if(g.type==='SATCHEL'){tl=ok(g.L)?L+2:0;}
+  else if(g.type==='SOS'||g.type==='TH'){tl=(ok(g.L)&&ok(g.G))?L+(G+4)/2:0;}
+  let gsm=0;
+  if(rmw&&tl&&ok(g.wpc)&&wpc>0){
+    if(g.type==='TH'){
+      gsm=(wpc-7.5)/(tl*rmw)*10000;
+      if(gsm<0)gsm=0;
+    } else {
+      gsm=wpc/(rmw*tl)*10000;
+    }
+  }
+  return{rmw,tl,gsm};
+}
 
-// ── TUBE LENGTH CELL ───────────────────────────────────────────────────────────
-function tubeLengthCell(tl, hasInputs) {
-  if (!hasInputs||!tl) return '<td class="td-cl e">—</td>';
-  const all = getAllCylinders();
-  const isMatch = all.includes(tl);
-  if (isMatch) {
-    const ms = machinesFor(tl);
-    return '<td class="td-tl-match" title="Exact match on '+ms.join(', ')+'">✓ '+tl+'</td>';
-  }
-  const {below, above} = nearestCylinders(tl);
-  let hints = '';
-  if (above!==null) {
-    const diff=above-tl, ms=machinesFor(above);
-    hints+='<span class="tl-up">▲ Use '+above+' ('+ms.join('/')+') → increase L by '+diff+'cm</span>';
-  }
-  if (below!==null) {
-    const diff=tl-below, ms=machinesFor(below);
-    if (hints) hints+='<br>';
-    hints+='<span class="tl-dn">▼ Use '+below+' ('+ms.join('/')+') → decrease L by '+diff+'cm</span>';
-  }
+const fmt=(v,d)=>{if(!v||v===0)return null;return parseFloat(v.toFixed(d)).toLocaleString('en-US',{maximumFractionDigits:d});};
+
+function tubeLengthCell(tl,hasInputs){
+  if(!hasInputs||!tl)return '<td class="td-cl e">—</td>';
+  const all=getAllCylinders();
+  if(all.includes(tl)){const ms=machinesFor(tl);return '<td class="td-tl-match">✓ '+tl+'</td>';}
+  const{below,above}=nearestCylinders(tl);
+  let hints='';
+  if(above!==null){const diff=above-tl,ms=machinesFor(above);hints+='<span class="tl-up">▲ Use '+above+' ('+ms.join('/')+') → increase L by '+diff+'cm</span>';}
+  if(below!==null){const diff=tl-below,ms=machinesFor(below);if(hints)hints+='<br>';hints+='<span class="tl-dn">▼ Use '+below+' ('+ms.join('/')+') → decrease L by '+diff+'cm</span>';}
   return '<td class="td-tl-suggest"><span class="tl-val">'+tl+'</span><span class="tl-hint">'+hints+'</span></td>';
 }
 
-// ── UPDATE CALCS ───────────────────────────────────────────────────────────────
-function setCL(td,v,d){ if(!td)return; const x=fmt(v,d); td.className=x?'td-cl':'td-cl e'; td.textContent=x||'—'; }
-function setPR(td,v,d){ if(!td)return; const x=fmt(v,d); td.className=x?'td-pr':'td-pr e'; td.textContent=x||'—'; }
-function setTeal(td,v,d){ if(!td)return; const x=fmt(v,d); td.className=x?'td-teal':'td-teal e'; td.textContent=x?(x+' SR'):'—'; }
+function setCL(td,v,d){if(!td)return;const x=fmt(v,d);td.className=x?'td-cl':'td-cl e';td.textContent=x||'—';}
+function setPR(td,v,d){if(!td)return;const x=fmt(v,d);td.className=x?'td-pr':'td-pr e';td.textContent=x||'—';}
+function setTeal(td,v,d){if(!td)return;const x=fmt(v,d);td.className=x?'td-teal':'td-teal e';td.textContent=x?(x+' SR'):'—';}
+function setPcsKG(td,v){if(!td)return;if(!v||v===0){td.className='td-pcskg e';td.innerHTML='—';return;}td.className='td-pcskg';td.innerHTML=parseFloat(v.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2})+'<span class="pcskg-unit">pcs</span>';}
+function setDiff(td,minref,ppkg){if(!td)return;if(!ppkg){td.className='td-eq';td.textContent='—';return;}const diff=ppkg-minref,sign=diff>0?'+':'',val=sign+parseFloat(diff.toFixed(3));if(diff>0){td.className='td-up';td.innerHTML='↑ '+val;}else if(diff<0){td.className='td-dn';td.innerHTML='↓ '+val;}else{td.className='td-eq';td.textContent='= 0';}}
+function calcTargetKG(r){const c=calc(r);const tp=nv(TARGET_PRICE[r.type]);if(!tp||!c.wpc)return null;return tp/c.wpc*1000;}
 
-function setPcsKG(td, v) {
-  if (!td) return;
-  if (!v || v === 0) { td.className='td-pcskg e'; td.innerHTML='—'; return; }
-  td.className = 'td-pcskg';
-  td.innerHTML = parseFloat(v.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2}) +
-    '<span class="pcskg-unit">pcs</span>';
-}
-
-function setDiff(td,minref,ppkg){
-  if(!td)return;
-  if(!ppkg){ td.className='td-eq'; td.textContent='—'; return; }
-  const diff=ppkg-minref, sign=diff>0?'+':'', val=sign+parseFloat(diff.toFixed(3));
-  if(diff>0)      { td.className='td-up'; td.innerHTML='↑ '+val; }
-  else if(diff<0) { td.className='td-dn'; td.innerHTML='↓ '+val; }
-  else            { td.className='td-eq'; td.textContent='= 0'; }
-}
-
-function updateCalcs() {
+function updateCalcs(){
   R.forEach(function(r,i){
-    const c = calc(r);
-    const hasInputs = ok(r.L)&&ok(r.W)&&ok(r.G)&&ok(r.GSM);
-
-    // Tab 0 - Specs
-    const r1 = document.querySelector('#t1 tr:nth-child('+(i+1)+')');
-    if (r1) {
-      const t = r1.querySelectorAll('td');
-      const lWrap = r1.querySelector('.l-wrap');
-      if (lWrap) {
-        const invalid = isLInvalid(r);
-        lWrap.classList.toggle('invalid', invalid);
-        const badge = lWrap.querySelector('.l-warn-badge');
-        if (badge) {
-          if (invalid) {
-            const minL = minLRequired(r);
-            badge.textContent = 'L must be > ' + minL.toFixed(1);
-          }
-        }
-      }
-      setCL(t[6], c.rmw, 1);
-      // Tube length cell (index 7)
-      const tlTd = t[7];
-      if (tlTd) {
-        const tmp = document.createElement('tbody');
-        tmp.innerHTML = '<tr>'+tubeLengthCell(c.tl, hasInputs)+'</tr>';
-        const newTd = tmp.querySelector('td');
-        tlTd.parentNode.replaceChild(newTd, tlTd);
-      }
-      setCL(t[8], c.wpc, 4);
-      // Pcs/KG cell (index 9)
-      setPcsKG(t[9], c.pcskg);
+    const c=calc(r);const hasInputs=ok(r.L)&&ok(r.W)&&ok(r.G)&&ok(r.GSM);
+    const r1=document.querySelector('#t1 tr:nth-child('+(i+1)+')');
+    if(r1){
+      const t=r1.querySelectorAll('td');
+      const lWrap=r1.querySelector('.l-wrap');
+      if(lWrap){const inv=isLInvalid(r);lWrap.classList.toggle('invalid',inv);const b=lWrap.querySelector('.l-warn-badge');if(b&&inv){const m=minLRequired(r);b.textContent='L must be > '+m.toFixed(1);}}
+      setCL(t[6],c.rmw,1);
+      const tlTd=t[7];if(tlTd){const tmp=document.createElement('tbody');tmp.innerHTML='<tr>'+tubeLengthCell(c.tl,hasInputs)+'</tr>';const n=tmp.querySelector('td');tlTd.parentNode.replaceChild(n,tlTd);}
+      setCL(t[8],c.wpc,4);setPcsKG(t[9],c.pcskg);
     }
-
-    // Tab 1 - Price/KG
-    const r2 = document.querySelector('#t2 tr:nth-child('+(i+1)+')');
-    if (r2) {
-      setDiff(r2.querySelectorAll('td')[3], MIN_REF[r.type], nv(r.ppkg));
-      const tkg = calcTargetKG(r);
-      const note = r2.querySelector('.ppkg-note');
-      const ppkgInp = r2.querySelector('.inp-pr');
-      if (note) {
-        if (tkg !== null) {
-          const minref = MIN_REF[r.type];
-          const isOk = tkg >= minref;
-          note.classList.add('visible');
-          note.classList.toggle('note-ok', isOk);
-          note.classList.toggle('note-warn', !isOk);
-          note.innerHTML =
-            '<span class="note-icon">'+(isOk?'✓':'⚠')+'</span>' +
-            'From target: <span class="note-val">'+parseFloat(tkg.toFixed(3))+'</span>' +
-            '<span class="note-unit">SR/KG</span>';
-        } else {
-          note.classList.remove('visible','note-ok','note-warn');
-          note.innerHTML = '';
-        }
-      }
-      if (ppkgInp) {
-        const pp = nv(r.ppkg);
-        const overTarget = tkg !== null && pp > 0 && pp > tkg;
-        ppkgInp.classList.toggle('over-target', overTarget);
-      }
+    const r2=document.querySelector('#t2 tr:nth-child('+(i+1)+')');
+    if(r2){
+      setDiff(r2.querySelectorAll('td')[3],MIN_REF[r.type],nv(r.ppkg));
+      const tkg=calcTargetKG(r);const note=r2.querySelector('.ppkg-note');const ppkgInp=r2.querySelector('.inp-pr');
+      if(note){if(tkg!==null){const isOk=tkg>=MIN_REF[r.type];note.classList.add('visible');note.classList.toggle('note-ok',isOk);note.classList.toggle('note-warn',!isOk);note.innerHTML='<span>'+(isOk?'✓':'⚠')+'</span> From target: <span class="note-val">'+parseFloat(tkg.toFixed(3))+'</span><span class="note-unit">SR/KG</span>';}else{note.classList.remove('visible','note-ok','note-warn');note.innerHTML='';}}
+      if(ppkgInp){ppkgInp.classList.toggle('over-target',tkg!==null&&nv(r.ppkg)>0&&nv(r.ppkg)>tkg);}
     }
+    const r3=document.querySelector('#t3 tr[data-idx="'+i+'"]');
+    if(r3){const t=r3.querySelectorAll('td');setCL(t[1],c.ppc,6);setCL(t[3],c.wctn,4);setPR(t[4],c.pctn,3);}
+    const r4=document.querySelector('#t4 tr:nth-child('+(i+1)+')');
+    if(r4){const t=r4.querySelectorAll('td');setCL(t[1],c.rmw,1);const tlTd=t[2];if(tlTd){tlTd.className=c.tl?'td-cl':'td-cl e';tlTd.textContent=c.tl?c.tl:'—';}setTeal(t[4],c.cliche,3);}
+  });
 
-    // Tab 2 - Final Pricing
-    const r3 = document.querySelector('#t3 tr[data-idx="'+i+'"]');
-    if (r3) {
-      const t = r3.querySelectorAll('td');
-      setCL(t[1], c.ppc, 6);
-      setCL(t[3], c.wctn, 4);
-      setPR(t[4], c.pctn, 3);
-    }
-
-    // Tab 3 - Cliché
-    const r4 = document.querySelector('#t4 tr:nth-child('+(i+1)+')');
-    if (r4) {
-      const t = r4.querySelectorAll('td');
-      setCL(t[1], c.rmw, 1);
-      const tlTd = t[2];
-      if (tlTd) {
-        tlTd.className = c.tl ? 'td-cl' : 'td-cl e';
-        tlTd.textContent = c.tl ? c.tl : '—';
-      }
-      setTeal(t[4], c.cliche, 3);
-    }
+  GR.forEach(function(g,i){
+    const c=calcGSM(g);
+    const row=document.querySelector('#tGSM tr[data-gidx="'+i+'"]');
+    if(!row)return;
+    const tds=row.querySelectorAll('td');
+    const rmwTd=tds[4];if(rmwTd){if(c.rmw){rmwTd.className='td-gsm-rmw';rmwTd.textContent=parseFloat(c.rmw.toFixed(2));}else{rmwTd.className='td-gsm-rmw e';rmwTd.textContent='—';}}
+    const tlTd=tds[5];if(tlTd){if(c.tl){tlTd.className='td-gsm-tl';tlTd.textContent=parseFloat(c.tl.toFixed(2));}else{tlTd.className='td-gsm-tl e';tlTd.textContent='—';}}
+    const gsmTd=tds[7];if(gsmTd){if(c.gsm&&c.gsm>0){gsmTd.className='td-gsm-result';gsmTd.innerHTML=parseFloat(c.gsm.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2})+'<span class="gsm-unit">g/m²</span>';}else{gsmTd.className='td-gsm-result e';gsmTd.textContent='—';}}
   });
 }
 
-function set(i,k,v){ R[i][k]=v; updateCalcs(); }
-function setCliche(type,v){ CLICHE_COLORS[type]=v; updateCalcs(); }
-function setTarget(type,v){ TARGET_PRICE[type]=v; updateCalcs(); }
+function set(i,k,v){R[i][k]=v;updateCalcs();}
+function setCliche(type,v){CLICHE_COLORS[type]=v;updateCalcs();}
+function setTarget(type,v){TARGET_PRICE[type]=v;updateCalcs();}
+function setGSM(i,k,v){GR[i][k]=v;updateCalcs();}
 
-function calcTargetKG(r) {
-  const c = calc(r);
-  const tp = nv(TARGET_PRICE[r.type]);
-  if (!tp || !c.wpc) return null;
-  return tp / c.wpc * 1000;
-}
-
-// ── RENDER ─────────────────────────────────────────────────────────────────────
-function render() {
-  // Tab 0 - Specs
-  document.getElementById('t1').innerHTML = R.map(function(r,i){
-    const c = calc(r);
-    const hasInputs = ok(r.L)&&ok(r.W)&&ok(r.G)&&ok(r.GSM);
-    const lInvalid = isLInvalid(r);
-    const minL = minLRequired(r);
-    const lWrapClass = 'l-wrap' + (lInvalid ? ' invalid' : '');
-    const badgeText = lInvalid && minL!==null ? 'L must be > '+minL.toFixed(1) : '';
-
-    // Pcs/KG cell HTML
-    const pcskgHtml = c.pcskg
-      ? '<td class="td-pcskg">'+parseFloat(c.pcskg.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2})+'<span class="pcskg-unit">pcs</span></td>'
-      : '<td class="td-pcskg e">—</td>';
-
-    return '<tr>' +
-      '<td class="td-tp">'+r.type+'</td>' +
-      '<td style="vertical-align:top;padding-top:8px;">' +
-        '<div class="'+lWrapClass+'">' +
-          '<input type="number" inputmode="decimal" value="'+iv(r.L)+'" step="0.5" placeholder="—" oninput="set('+i+',\'L\',this.value)">' +
-          '<div class="l-warn-badge">'+badgeText+'</div>' +
-        '</div>' +
-      '</td>' +
-      '<td><input type="number" inputmode="decimal" value="'+iv(r.W)+'" step="0.5" placeholder="—" oninput="set('+i+',\'W\',this.value)"></td>' +
-      '<td><input type="number" inputmode="decimal" value="'+iv(r.G)+'" step="0.5" placeholder="—" oninput="set('+i+',\'G\',this.value)"></td>' +
-      '<td class="td-fx">4</td>' +
-      '<td><input type="number" inputmode="decimal" value="'+iv(r.GSM)+'" step="1" placeholder="—" oninput="set('+i+',\'GSM\',this.value)"></td>' +
-      '<td class="'+(c.rmw?'td-cl':'td-cl e')+'">'+(fmt(c.rmw,1)||'—')+'</td>' +
-      tubeLengthCell(c.tl, hasInputs) +
-      '<td class="'+(c.wpc?'td-cl':'td-cl e')+'">'+(fmt(c.wpc,4)||'—')+'</td>' +
-      pcskgHtml +
-    '</tr>';
+function render(){
+  // Pane 0
+  document.getElementById('t1').innerHTML=R.map(function(r,i){
+    const c=calc(r);const hasInputs=ok(r.L)&&ok(r.W)&&ok(r.G)&&ok(r.GSM);
+    const lInvalid=isLInvalid(r);const minL=minLRequired(r);
+    const lWC='l-wrap'+(lInvalid?' invalid':'');
+    const bT=lInvalid&&minL?'L must be > '+minL.toFixed(1):'';
+    const pkH=c.pcskg?'<td class="td-pcskg">'+parseFloat(c.pcskg.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2})+'<span class="pcskg-unit">pcs</span></td>':'<td class="td-pcskg e">—</td>';
+    return '<tr><td class="td-tp">'+r.type+'</td>'+
+      '<td style="vertical-align:top;padding-top:8px;"><div class="'+lWC+'"><input type="number" inputmode="decimal" value="'+iv(r.L)+'" step="0.5" placeholder="—" oninput="set('+i+',\'L\',this.value)"><div class="l-warn-badge">'+bT+'</div></div></td>'+
+      '<td><input type="number" inputmode="decimal" value="'+iv(r.W)+'" step="0.5" placeholder="—" oninput="set('+i+',\'W\',this.value)"></td>'+
+      '<td><input type="number" inputmode="decimal" value="'+iv(r.G)+'" step="0.5" placeholder="—" oninput="set('+i+',\'G\',this.value)"></td>'+
+      '<td class="td-fx">4</td>'+
+      '<td><input type="number" inputmode="decimal" value="'+iv(r.GSM)+'" step="1" placeholder="—" oninput="set('+i+',\'GSM\',this.value)"></td>'+
+      '<td class="'+(c.rmw?'td-cl':'td-cl e')+'">'+(fmt(c.rmw,1)||'—')+'</td>'+
+      tubeLengthCell(c.tl,hasInputs)+
+      '<td class="'+(c.wpc?'td-cl':'td-cl e')+'">'+(fmt(c.wpc,4)||'—')+'</td>'+
+      pkH+'</tr>';
   }).join('');
 
-  // Tab 1 - Price/KG
-  document.getElementById('t2').innerHTML = R.map(function(r,i){
-    const minref = MIN_REF[r.type];
-    const pp = nv(r.ppkg);
-    const diff = pp ? pp - minref : null;
-    const sign = diff!==null&&diff>0?'+':'';
-    const dv   = diff!==null ? sign+parseFloat(diff.toFixed(3)) : null;
-    let dc='td-eq', dh='—';
-    if (diff!==null) {
-      if (diff>0)      { dc='td-up'; dh='↑ '+dv; }
-      else if (diff<0) { dc='td-dn'; dh='↓ '+dv; }
-      else             { dc='td-eq'; dh='= 0'; }
-    }
-    const tkg = calcTargetKG(r);
-    let noteHtml = '';
-    if (tkg !== null) {
-      const isOk = tkg >= minref;
-      const cls = isOk ? 'note-ok' : 'note-warn';
-      const icon = isOk ? '✓' : '⚠';
-      noteHtml = '<div class="ppkg-note visible '+cls+'">' +
-        '<span class="note-icon">'+icon+'</span>' +
-        'From target: <span class="note-val">'+parseFloat(tkg.toFixed(3))+'</span>' +
-        '<span class="note-unit">SR/KG</span>' +
-      '</div>';
-    } else {
-      noteHtml = '<div class="ppkg-note"></div>';
-    }
-    const overTarget = tkg !== null && pp > 0 && pp > tkg;
-
-    return '<tr>' +
-      '<td class="td-tp">'+r.type+'</td>' +
-      '<td class="td-ref-fixed">' +
-        minref.toLocaleString('en-US',{minimumFractionDigits: minref%1===0?0:1, maximumFractionDigits:2}) +
-        '<span class="ref-unit">SR</span>' +
-        '<span class="ref-lock">🔒</span>' +
-      '</td>' +
-      '<td style="background:rgba(184,112,9,0.05);border-bottom:1px solid rgba(184,112,9,0.09);vertical-align:top;padding-top:9px;">' +
-        '<div class="ppkg-wrap">' +
-          '<input type="number" inputmode="decimal" class="inp-pr'+(overTarget?' over-target':'')+'" value="'+iv(r.ppkg)+'" step="0.01" placeholder="0.00" oninput="set('+i+',\'ppkg\',this.value)">' +
-          noteHtml +
-        '</div>' +
-      '</td>' +
-      '<td class="'+dc+'" style="text-align:center;">'+dh+'</td>' +
-      '<td class="td-target">' +
-        '<input type="number" inputmode="decimal" class="inp-ref" value="'+iv(TARGET_PRICE[r.type])+'" step="0.001" placeholder="0.000" oninput="setTarget(\''+r.type+'\',this.value)">' +
-      '</td>' +
-    '</tr>';
+  // Pane 1
+  document.getElementById('t2').innerHTML=R.map(function(r,i){
+    const minref=MIN_REF[r.type];const pp=nv(r.ppkg);
+    const diff=pp?pp-minref:null;const sign=diff!==null&&diff>0?'+':'';const dv=diff!==null?sign+parseFloat(diff.toFixed(3)):null;
+    let dc='td-eq',dh='—';
+    if(diff!==null){if(diff>0){dc='td-up';dh='↑ '+dv;}else if(diff<0){dc='td-dn';dh='↓ '+dv;}else{dc='td-eq';dh='= 0';}}
+    const tkg=calcTargetKG(r);
+    let noteHtml='<div class="ppkg-note"></div>';
+    if(tkg!==null){const isOk=tkg>=minref;noteHtml='<div class="ppkg-note visible '+(isOk?'note-ok':'note-warn')+'"><span>'+(isOk?'✓':'⚠')+'</span> From target: <span class="note-val">'+parseFloat(tkg.toFixed(3))+'</span><span class="note-unit">SR/KG</span></div>';}
+    const ot=tkg!==null&&pp>0&&pp>tkg;
+    return '<tr><td class="td-tp">'+r.type+'</td>'+
+      '<td class="td-ref-fixed">'+minref.toLocaleString('en-US',{minimumFractionDigits:minref%1===0?0:1,maximumFractionDigits:2})+'<span class="ref-unit">SR</span><span class="ref-lock">🔒</span></td>'+
+      '<td style="background:rgba(184,112,9,0.05);border-bottom:1px solid rgba(184,112,9,0.09);vertical-align:top;padding-top:9px;"><div class="ppkg-wrap"><input type="number" inputmode="decimal" class="inp-pr'+(ot?' over-target':'')+'" value="'+iv(r.ppkg)+'" step="0.01" placeholder="0.00" oninput="set('+i+',\'ppkg\',this.value)">'+noteHtml+'</div></td>'+
+      '<td class="'+dc+'" style="text-align:center;">'+dh+'</td>'+
+      '<td class="td-target"><input type="number" inputmode="decimal" value="'+iv(TARGET_PRICE[r.type])+'" step="0.001" placeholder="0.000" oninput="setTarget(\''+r.type+'\',this.value)"></td></tr>';
   }).join('');
 
-  // Tab 2 - Final Pricing
-  document.getElementById('t3').innerHTML = R.map(function(r,i){
-    const c = calc(r);
-    return '<tr data-idx="'+i+'">' +
-      '<td class="td-tp">'+r.type+'</td>' +
-      '<td class="'+(c.ppc?'td-cl':'td-cl e')+'">'+(fmt(c.ppc,6)||'—')+'</td>' +
-      '<td><input type="number" inputmode="decimal" value="'+iv(r.pack)+'" step="1" placeholder="—" oninput="set('+i+',\'pack\',this.value)"></td>' +
-      '<td class="'+(c.wctn?'td-cl':'td-cl e')+'">'+(fmt(c.wctn,4)||'—')+'</td>' +
-      '<td class="'+(c.pctn?'td-pr':'td-pr e')+'">'+(fmt(c.pctn,3)||'—')+'</td>' +
-    '</tr>';
+  // Pane 2
+  document.getElementById('t3').innerHTML=R.map(function(r,i){
+    const c=calc(r);
+    return '<tr data-idx="'+i+'"><td class="td-tp">'+r.type+'</td>'+
+      '<td class="'+(c.ppc?'td-cl':'td-cl e')+'">'+(fmt(c.ppc,6)||'—')+'</td>'+
+      '<td><input type="number" inputmode="decimal" value="'+iv(r.pack)+'" step="1" placeholder="—" oninput="set('+i+',\'pack\',this.value)"></td>'+
+      '<td class="'+(c.wctn?'td-cl':'td-cl e')+'">'+(fmt(c.wctn,4)||'—')+'</td>'+
+      '<td class="'+(c.pctn?'td-pr':'td-pr e')+'">'+(fmt(c.pctn,3)||'—')+'</td></tr>';
   }).join('');
 
-  // Tab 3 - Cliché
-  document.getElementById('t4').innerHTML = R.map(function(r,i){
-    const c = calc(r);
-    const colors = CLICHE_COLORS[r.type];
-    return '<tr>' +
-      '<td class="td-tp">'+r.type+'</td>' +
-      '<td class="'+(c.rmw?'td-cl':'td-cl e')+'">'+(fmt(c.rmw,1)||'—')+'</td>' +
-      '<td class="'+(c.tl?'td-cl':'td-cl e')+'">'+(c.tl||'—')+'</td>' +
-      '<td style="background:rgba(14,116,144,0.04);border-bottom:1px solid rgba(14,116,144,0.09);border-right:1px solid rgba(14,116,144,0.12);">' +
-        '<input type="number" inputmode="decimal" class="inp-teal" value="'+iv(colors)+'" step="1" min="1" placeholder="—" oninput="setCliche(\''+r.type+'\',this.value)">' +
-      '</td>' +
-      '<td class="'+(c.cliche?'td-teal':'td-teal e')+'">'+(c.cliche?(fmt(c.cliche,3)+' SR'):'—')+'</td>' +
-    '</tr>';
+  // Pane 3
+  document.getElementById('t4').innerHTML=R.map(function(r,i){
+    const c=calc(r);const colors=CLICHE_COLORS[r.type];
+    return '<tr><td class="td-tp">'+r.type+'</td>'+
+      '<td class="'+(c.rmw?'td-cl':'td-cl e')+'">'+(fmt(c.rmw,1)||'—')+'</td>'+
+      '<td class="'+(c.tl?'td-cl':'td-cl e')+'">'+(c.tl||'—')+'</td>'+
+      '<td style="background:rgba(14,116,144,0.04);border-bottom:1px solid rgba(14,116,144,0.09);border-right:1px solid rgba(14,116,144,0.12);"><input type="number" inputmode="decimal" class="inp-teal" value="'+iv(colors)+'" step="1" min="1" placeholder="—" oninput="setCliche(\''+r.type+'\',this.value)"></td>'+
+      '<td class="'+(c.cliche?'td-teal':'td-teal e')+'">'+(c.cliche?(fmt(c.cliche,3)+' SR'):'—')+'</td></tr>';
   }).join('');
 
-  // Cylinders
-  const maxRows = Math.max(CYLINDERS.m1.length, CYLINDERS.m2.length, CYLINDERS.m3.length, CYLINDERS.m4.length);
-  let cylHtml = '';
-  for (let row=0; row<maxRows; row++) {
-    cylHtml += '<tr>';
-    ['m1','m2','m3','m4'].forEach(function(k,ki){
-      const colors=['cyl-m1','cyl-m2','cyl-m3','cyl-m4'];
-      const val = CYLINDERS[k][row];
-      cylHtml += '<td class="'+colors[ki]+'">'+(val!==undefined?val:'')+'</td>';
-    });
-    cylHtml += '</tr>';
+  // Pane 4 - Cylinders
+  const maxRows=Math.max(CYLINDERS.m1.length,CYLINDERS.m2.length,CYLINDERS.m3.length,CYLINDERS.m4.length);
+  let cylHtml='';
+  for(let row=0;row<maxRows;row++){
+    cylHtml+='<tr>';
+    ['m1','m2','m3','m4'].forEach(function(k,ki){const val=CYLINDERS[k][row];cylHtml+='<td class="cyl-'+['m1','m2','m3','m4'][ki]+'">'+(val!==undefined?val:'')+'</td>';});
+    cylHtml+='</tr>';
   }
-  document.getElementById('cylTable').innerHTML = cylHtml;
+  document.getElementById('cylTable').innerHTML=cylHtml;
+
+  // Pane 5 - GSM Calculator
+  document.getElementById('tGSM').innerHTML=GR.map(function(g,i){
+    const c=calcGSM(g);
+    return '<tr data-gidx="'+i+'">'+
+      '<td class="td-tp">'+g.label+'<span class="gsm-type-badge">'+g.badge+'</span></td>'+
+      '<td><input type="number" inputmode="decimal" value="'+iv(g.L)+'" step="0.5" placeholder="—" oninput="setGSM('+i+',\'L\',this.value)"></td>'+
+      '<td><input type="number" inputmode="decimal" value="'+iv(g.W)+'" step="0.5" placeholder="—" oninput="setGSM('+i+',\'W\',this.value)"></td>'+
+      '<td><input type="number" inputmode="decimal" value="'+iv(g.G)+'" step="0.5" placeholder="—" oninput="setGSM('+i+',\'G\',this.value)"></td>'+
+      '<td class="'+(c.rmw?'td-gsm-rmw':'td-gsm-rmw e')+'">'+(c.rmw?parseFloat(c.rmw.toFixed(2)):'—')+'</td>'+
+      '<td class="'+(c.tl?'td-gsm-tl':'td-gsm-tl e')+'">'+(c.tl?parseFloat(c.tl.toFixed(2)):'—')+'</td>'+
+      '<td><input type="number" inputmode="decimal" value="'+iv(g.wpc)+'" step="0.1" placeholder="—" oninput="setGSM('+i+',\'wpc\',this.value)"></td>'+
+      '<td class="'+(c.gsm&&c.gsm>0?'td-gsm-result':'td-gsm-result e')+'">'+(c.gsm&&c.gsm>0?parseFloat(c.gsm.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2})+'<span class="gsm-unit">g/m²</span>':'—')+'</td>'+
+    '</tr>';
+  }).join('');
 }
 
-// ── TABS ───────────────────────────────────────────────────────────────────────
-let activeTab = 0;
-function switchTab(n) {
-  document.querySelectorAll('.tab').forEach(function(t,i){ t.classList.toggle('active',i===n); });
-  document.querySelectorAll('.tab-pane').forEach(function(p,i){ p.classList.toggle('active',i===n); });
-  activeTab = n;
+let activeTab=0;
+function switchTab(n){document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===n));document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));activeTab=n;}
+function closeModal(){document.getElementById('modal').classList.remove('on');}
+function confirmClear(){
+  R=TYPES.map(r=>Object.assign({},r));
+  CLICHE_COLORS={'LARGE SAT':'','SOS':'','TH':''};
+  TARGET_PRICE={'LARGE SAT':'','SOS':'','TH':''};
+  GR=GSM_DEFS.map(r=>Object.assign({},r,{L:'',W:'',G:'',wpc:''}));
+  render();closeModal();
 }
-
-function closeModal()   { document.getElementById('modal').classList.remove('on'); }
-function confirmClear() {
-  R = TYPES.map(function(r){ return Object.assign({},r); });
-  CLICHE_COLORS = {'LARGE SAT':'', 'SOS':'', 'TH':''};
-  TARGET_PRICE  = {'LARGE SAT':'', 'SOS':'', 'TH':''};
-  render(); closeModal();
-}
-document.getElementById('modal').addEventListener('click', function(e){ if(e.target.id==='modal') closeModal(); });
-
-window.addEventListener('orientationchange', function(){
-  setTimeout(function(){
-    if (window.innerWidth > window.innerHeight)
-      document.getElementById('rotate-hint').style.display='none';
-  }, 300);
-});
-
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+window.addEventListener('orientationchange',()=>{setTimeout(()=>{if(window.innerWidth>window.innerHeight)document.getElementById('rotate-hint').style.display='none';},300);});
 render();
 </script>
-
 </body>
 </html>
